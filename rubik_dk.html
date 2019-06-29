@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Rubik Dk</title>
+	<link rel="stylesheet" type="text/css" href="src/css/scene.css">
+</head>
+<body>
+	<div class="scene">
+	  <div class="cube">
+	    <div class="cube-face cube-face-front">front</div>
+	    <div class="cube-face cube-face-back">back</div>
+	    <div class="cube-face cube-face-right">right</div>
+	    <div class="cube-face cube-face-left">left</div>
+	    <div class="cube-face cube-face-top">top</div>
+	    <div class="cube-face cube-face-bottom">bottom</div>
+	  </div>
+	</div>
+
+	<div class="radio-group">
+  		<label>
+    		<input type="radio" name="rotate-cube-side" value="front" checked /> front
+  		</label>
+  		<label>
+    		<input type="radio" name="rotate-cube-side" value="right" /> right
+  		</label>
+  		<label>
+    		<input type="radio" name="rotate-cube-side" value="back" /> back
+  		</label>
+  		<label>
+    		<input type="radio" name="rotate-cube-side" value="left" /> left
+	  	</label>
+	  	<label>
+		    <input type="radio" name="rotate-cube-side" value="top" /> top
+	  	</label>
+	  	<label>
+		    <input type="radio" name="rotate-cube-side" value="bottom" /> bottom
+	  	</label>
+	</div>
+
+
+	<script type="text/javascript" src="src/js/cubo.js"></script>
+	<script type="text/javascript" src="src/js/crear_piezas.js"></script>
+	<script type="text/javascript" src="src/js/girar_cubo.js"></script>
+</body>
+</html>
