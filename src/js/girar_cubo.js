@@ -1,15 +1,18 @@
+let scene = document.querySelector('.scene');
 let cubo = document.querySelector('.cube');
-let radioGroup = document.querySelector('.radio-group');
-let ladoActual ='';
+/*--------------------------------------------------------*/
+let rotarX = 0, rotarY = 0;
+function mover(e) { //Desplazar mouse en el eje "x"  provoca la rotación del eje "y" y visceversa
+	rotarX-= e.movementY;
+	rotarY+= e.movementX;
+	cubo.style.transform = "rotateX("+rotarX+"deg) rotateY("+rotarY+"deg)";
 
-function girarCubo() {
-  	let checkedRadio = radioGroup.querySelector(':checked');
-  	let showClass = 'show-' + checkedRadio.value;
-
-  	if(ladoActual) cubo.classList.remove(ladoActual);
-  	cubo.classList.add(showClass);
-  	ladoActual = showClass;
 }
-girarCubo(); //Giro inicial
 
-radioGroup.addEventListener( 'change', girarCubo);
+scene.addEventListener( 'mousedown', e => {
+	if(e.button === 0 && e.target == scene) scene.addEventListener('mousemove', mover);
+});
+
+scene.addEventListener( 'mouseup', e => {
+	scene.removeEventListener('mousemove', mover);
+});

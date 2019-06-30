@@ -1,16 +1,20 @@
 .scene {
-  width: 200px;
-  height: 200px;
-  perspective: 400px;
-  color: #ffff;
-  margin: 80px;
+  position: relative;
+  width: 600px;
+  height: 600px;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  border: 2px solid #079992;
 }
 
 .cube {
-  width: 100%;
-  height: 100%;
-  position: relative;
+  margin: 200px;
+  z-index: 1000;
+  width: 200px;
+  height: 200px;
+  position: absolute;
   transform-style: preserve-3d;
+  transform: rotateX(-30deg) rotateY(30deg);
   transition: transform 1s;
 }
 
@@ -21,16 +25,21 @@
   border: 2px solid black;
 }
 
-.cube-face-front  { transform: translateZ(100px); background: rgba(185,0,0,.7);}
-.cube-face-right  { transform: rotateY(90deg) translateZ(100px); background: rgba(255,255,255,.7);}
-.cube-face-back  { transform: rotateY(180deg) translateZ(100px); background: rgba(255,89,0,.7);}
-.cube-face-left  { transform: rotateY(-90deg) translateZ(100px); background: rgba(255,213,0,.7);}
-.cube-face-top  { transform: rotateX(90deg) translateZ(100px); background: rgba(0,155,72,.7);}
-.cube-face-bottom  { transform: rotateX(-90deg) translateZ(100px); background: rgba(0,69,173,.7);}
+.cube-face-front  { transform: rotateY(0deg) translateZ(100px); background: rgb(185,0,0,.7);}
+.cube-face-right  { transform: rotateY(90deg) translateZ(100px); background: rgb(255,255,255,.7);}
+.cube-face-back  { transform: rotateY(180deg) translateZ(100px); background: rgb(255,89,0,.7);}
+.cube-face-left  { transform: rotateY(-90deg) translateZ(100px); background: rgb(255,213,0,.7);}
+.cube-face-top  { transform: rotateX(90deg) translateZ(100px); background: rgb(0,155,72,.7);}
+.cube-face-bottom  { transform: rotateX(-90deg) translateZ(100px); background: rgb(0,69,173,.7);}
 
-.cube.show-front  { transform: rotateY(30deg) }
-.cube.show-right  { transform: rotateY(-60deg) }
-.cube.show-back   { transform: rotateY(-150deg); }
-.cube.show-left   { transform: rotateY(60deg); }
-.cube.show-top    { transform: rotateX(-60deg); }
-.cube.show-bottom { transform: rotateX(60deg); }
+
+.fila {
+  display: flex;
+  height: 33.3%;
+}
+
+.pieza {
+  width: 33.3%;
+  background: #fff;
+  border: 2px solid black;
+}
