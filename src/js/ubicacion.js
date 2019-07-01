@@ -1,53 +1,49 @@
+/*---------------------------------------- ROTACIÓN DEL CUBO ----------------------------------------------*/
 let space = document.querySelector('.space');
-let cubo = document.querySelector('.cube');
-/*--------------------------------------------------------*/
-let rotarX = -30, rotarY = 30;
+let cubo3D = document.querySelector('.cube');
+let x = -30, y = 30; //Posición inicial del cubo (rotateX & rotateY)
 
+/*--------------------------------------------------------*/
+let girarCubo = (x,y) => {cubo3D.style.transform = "rotateX("+x+"deg) rotateY("+y+"deg)";}
 
 let giroInicial = setInterval(function(){
-	cubo.style.transform = "rotateX("+rotarX+"deg) rotateY("+rotarY+"deg)";
+	girarCubo(x,y);
 	clearInterval(giroInicial);
-});
+}, /*1000*/);
 
-
-function mover(e) { //Desplazar mouse en el eje "x"  provoca la rotación del eje "y" y visceversa
-	rotarX-= e.movementY;
-	rotarY+= e.movementX;
-	cubo.style.transform = "rotateX("+rotarX+"deg) rotateY("+rotarY+"deg)";
+let desplazar = e => {
+	cubo3D.style.transition = 'transform 0s'; //Rotación inmediata
+	x-= e.movementY; y+= e.movementX; //Desplazar el mouse en el eje "x" provoca la rotación del eje "y" y visceversa
+	girarCubo(x,y);
 }
-
+/*---------------------------------------- Eventos de giro -------------------------------------------------*/
 space.addEventListener( 'mousedown', e => {
-	cubo.style.transition = 'transform 0s';
-	if(e.button === 0 && e.target == space) document.addEventListener('mousemove', mover);
+	if(e.button === 0 && e.target == space) document.addEventListener('mousemove', desplazar);
 });
+document.addEventListener('mouseup', e => { document.removeEventListener('mousemove', desplazar); });
 
-document.addEventListener( 'mouseup', e => {
-	document.removeEventListener('mousemove', mover);
-});
 
-/*------------------------------------------------------------------------------------------------*/
-
-let cube_sides = ['front','back', 'right', 'left', 'top', 'bottom' ];
+/*------------------------------ CREAR Y UBICAR PIEZAS EN LA INTERFAZ --------------------------------------*/
 let CENTROS = [];
 
 for(let i = 0; i < 6; i++) {
-	let piece_sides = [];
-	for(let side of cube_sides) {
-		let p_side = crearElemento('span', {class:'pieza-face pieza-'+side});
+	let ladosPieza = [];
+	for(let l of CUBO.LADOS) {
+		let lado = crearElemento('span', {class:'pieza-face pieza-'+l});
 		let color = setInterval(function(){
-			p_side.style.background = CUBO.centros[i].color;
+			lado.style.background = CUBO.centros[i].color;
 			let x = CUBO.centros[i].posicion.x,
 				y = CUBO.centros[i].posicion.y,
 				z = CUBO.centros[i].posicion.z;
 			let posicion = x+'-'+y+'-'+z;
-			p_side.id = posicion; //ASIGNAR ID A LA PIEZA CENTRAL (p_central)
+			lado.id = posicion; //ASIGNAR ID A LA PIEZA CENTRAL (p_central)
 			clearInterval(color);
 		}, 500);
 		
-		piece_sides.push(p_side);
+		ladosPieza.push(lado);
 	}
 
-	var p_central = crearElemento('span', {class:'pieza p-central'}, piece_sides);
+	var p_central = crearElemento('span', {class:'pieza p-central'}, ladosPieza);
 	document.getElementsByClassName('cube-face')[i].appendChild(p_central);
 	CENTROS.push(p_central);
 }
