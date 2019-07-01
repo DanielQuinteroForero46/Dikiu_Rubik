@@ -3,39 +3,23 @@
 <head>
 	<meta charset="utf-8">
 	<title>Rubik Dk</title>
-	<link rel="stylesheet" type="text/css" href="src/css/scene.css">
+	<link rel="stylesheet" type="text/css" href="src/css/cubo.css">
 </head>
 <body>
-	<div class="scene">
-	  <div class="cube">
-	    	<div class="cube-face cube-face-front">
-	    		<div class="fila">
-	    			<div class="pieza">Pieza</div>
-	    			<div class="pieza">Pieza</div>
-	    			<div class="pieza">Pieza</div>
-	    		</div>
-	    		<div class="fila">
-	    			<div class="pieza">Pieza</div>
-	    			<div class="pieza">Pieza</div>
-	    			<div class="pieza">Pieza</div>
-	    		</div>
-	    		<div class="fila">
-	    			<div class="pieza">Pieza</div>
-	    			<div class="pieza">Pieza</div>
-	    			<div class="pieza">Pieza</div>
-	    		</div>
-	    	</div>
-	    	<div class="cube-face cube-face-back"></div>
-	    	<div class="cube-face cube-face-right"></div>
-	    	<div class="cube-face cube-face-left"></div>
-	    	<div class="cube-face cube-face-top"></div>
-	    	<div class="cube-face cube-face-bottom"></div>
+	<div class="space">
+	  <div class="cube"> <!-- CARA - CONTRACARA (CONSECUTIVAS) -->
+	    	<div class="cube-face cube-left"></div>
+	    	<div class="cube-face cube-right"></div>
+	    	<div class="cube-face cube-top"></div>
+	    	<div class="cube-face cube-bottom"></div>
+	    	<div class="cube-face cube-front"></div>
+	    	<div class="cube-face cube-back"></div>
 	  	</div>
 	</div>
 
-
+	<script type="text/javascript" src="src/js/crear_elementos.js"></script>
 	<script type="text/javascript" src="src/js/cubo.js"></script>
 	<script type="text/javascript" src="src/js/crear_piezas.js"></script>
-	<script type="text/javascript" src="src/js/girar_cubo.js"></script>
+	<script type="text/javascript" src="src/js/ubicacion.js"></script>
 </body>
 </html>
