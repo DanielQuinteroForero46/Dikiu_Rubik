@@ -3,6 +3,7 @@ const CUBO = {
     RUBIK: new Array(3), //Matriz multidimensional en la cual se almacenará cada pieza representada como un objeto.
     NUCLEO: {x:1, y:1, z:1}, //Eje central del cubo, a partir del cual se ubicarán las piezas.
     MOV: {uno:-1, dos:1}, //MOVIMIENTO: Dirección de movimiento de cada eje con respecto al nucleo
+    LADOS: ['front','back', 'right', 'left', 'top', 'bottom'],
     COLORES: { x: ['#FFD500', '#FFFFFF'], y: ['#009B48', '#0045AD'], z: ['#B90000', '#FF5900'] }, /*  Amarillo, Blanco  |  Verde, Azul  |  Rojo, Naranja */
     centros: [],
     aristas: [],
@@ -10,7 +11,7 @@ const CUBO = {
     coloresAristas: [],
     coloresEsquinas: []
 }
-/*------------ CREAR MATRIZ DEL CUBO ------------*/
+/*----------- MATRIZ DEL CUBO -----------*/
 for(let x = 0; x < CUBO.RUBIK.length; x++) {
   CUBO.RUBIK[x] = new Array(3); //Agregar 3 posiciones del eje "x" a cada posición del eje "y"
   for(let z = 0; z < CUBO.RUBIK.length; z++) {

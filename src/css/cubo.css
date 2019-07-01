@@ -6,11 +6,9 @@
   width: 600px;
   height: 600px;
   perspective: 1200px;
-  transform-style: preserve-3d;
-  /*transform: scale(3);*/
+  transform-style: preserve-3d; /*transform: scale(2.5);*/
   border: 4px solid #2c3e50;
 }
-
 
 /*-------------------------- CUBO: ROTACIÓN DE LAS 6 CARAS ---------------------------------------*/
 .cube-front, .pieza-front  { transform: rotateY(0deg) translateZ(99px); }
@@ -37,8 +35,7 @@
   border-radius: 8px;
 }
 
-
-/*-------------------------- PIEZA: ROTACIÓN DE LAS 6 CARAS -------------------------------------*/
+/*-------------------------- PIEZAS: ROTACIÓN DE LAS 6 CARAS -------------------------------------*/
 .pieza-front {transform: rotateY(0deg) translateZ(1px); }
 .pieza-back  { transform: rotateY(180deg) translateZ(63px); }
 .pieza-top  { transform: rotateX(90deg) translateZ(32px) translateY(-48%); }
@@ -63,5 +60,5 @@
   transition: background 3s;
 }
 
-
+/*------------------------------------- PIEZAS CENTRALES -----------------------------------------*/
 .p-central { transform: translateX(100%) translateY(100%) translateZ(-60px); transition: transform 0.5s; }
