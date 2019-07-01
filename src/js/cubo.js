@@ -21,7 +21,8 @@ for(let x = 0; x < CUBO.RUBIK.length; x++) {
 /*-------------------------------------------------------------------------------------------------------------------------------*/
 /*PIEZAS (27):*/
 class Pieza {
-    constructor(color, posicion) {
+    constructor(pieza3D, color, posicion) {
+        this.pieza3D = pieza3D;
         this.color = color;
         this.posicion = posicion;
     }

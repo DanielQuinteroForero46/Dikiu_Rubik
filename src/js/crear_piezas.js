@@ -19,32 +19,33 @@ class CrearPiezas {
                 case 'centro':
                     let c = Object.values(CUBO.MOV).indexOf(lado); //Ubicación del color de acuerdo al lado: -1 -> cara, 1: contracara
                     var color = CUBO.COLORES[this.eje][c];
-                    this.guardarPieza(CUBO.centros, color);
+                    this.crearModelo(CUBO.centros, color);
                     break;
                 case 'arista':
                 	var rest = Object.keys(this.posicion);  //Descartar eje de la iteración, guardar ejes restantes
             		rest.splice(rest.indexOf(this.eje), 1); //Al segundo eje (Descartando el eje de la iteración), se le aplica el patrón -1 & 1:
                 	for (let pos of Object.values(CUBO.MOV)) {
                         this.moverEje(this.eje, lado);
-                        this.posicion[rest[1]] += pos; this.guardarPieza(CUBO.aristas, coloresAzar(CUBO.coloresAristas));
-                	} 
-                	break;
+                        // console.log(this.posicion);
+                        // console.log(this.eje);
+                        this.posicion[rest[1]] += pos; this.crearModelo(CUBO.aristas, coloresAzar(CUBO.coloresAristas));
+                    } 
+                    break;
                 case 'esquina':
                 	let updown = Object.keys(CUBO.NUCLEO).indexOf(this.eje) * 2; //Esquinas superiores: 0 | Esquinas inferiores: 1
                 	for (let posZ of Object.values(CUBO.MOV)) { //Posición del eje z (FRONT || BACK)
 	                    this.moverEje('x', lado); //Unificar enviando los tres valores (lado - updown - pos)
 	                    this.posicion['y'] = updown;
                         this.posicion['z'] += posZ;
-                        this.guardarPieza(CUBO.esquinas, coloresAzar(CUBO.coloresEsquinas));
+                        this.crearModelo(CUBO.esquinas, coloresAzar(CUBO.coloresEsquinas));
                 	} 
                 	break;
             }
       	}
     }
 
-    guardarPieza(array_piezas, color) {
-        array_piezas.push(new Pieza(color, // Color
-        {x:this.posicion.x, y:this.posicion.y, z:this.posicion.z})); //Posición
+    crearModelo(array_piezas, color) {
+        pieza3D(array_piezas, {x:this.posicion.x, y:this.posicion.y, z:this.posicion.z}, color);
     }
 }
 
@@ -61,5 +62,5 @@ function crearPiezas() { /*Por cada eje se crea: 2 centros | 4 aristas | 4 esqui
   		var esquinas = new CrearPiezas('esquina', eje); /*4 esquinas opuestas (CARA - CONTRACARA)*/
   		esquinas.crear();
   	}
-    console.log(CUBO.centros); console.log(CUBO.aristas); console.log(CUBO.esquinas);
+    console.log(CUBO.centros); console.log(CUBO.aristas); console.log(CUBO.esquinas); console.log(CUBO.RUBIK);
 }

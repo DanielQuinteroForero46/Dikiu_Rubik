@@ -24,33 +24,37 @@ document.addEventListener('mouseup', e => { document.removeEventListener('mousem
 
 
 /*------------------------------ CREAR Y UBICAR PIEZAS EN LA INTERFAZ --------------------------------------*/
-let CENTROS = [];
 
-for(let i = 0; i < 6; i++) {
-	let ladosPieza = [];
-	for(let l of CUBO.LADOS) {
+//Definir modelo 3D de la pieza:
+function pieza3D(array_piezas, pos, color) {
+	let pieza = crearElemento('span', {class:'pieza p-central'});
+	for(let l of CUBO.LADOS) { //Definir 6 lados para cada pieza
 		let lado = crearElemento('span', {class:'pieza-face pieza-'+l});
-		let color = setInterval(function(){
-			lado.style.background = CUBO.centros[i].color;
-			let x = CUBO.centros[i].posicion.x,
-				y = CUBO.centros[i].posicion.y,
-				z = CUBO.centros[i].posicion.z;
-			let posicion = x+'-'+y+'-'+z;
-			lado.id = posicion; //ASIGNAR ID A LA PIEZA CENTRAL (p_central)
-			clearInterval(color);
-		}, 500);
-		
-		ladosPieza.push(lado);
+		lado.style.background = color;
+		pieza.appendChild(lado);
 	}
+	let posicion = pos.x+'-'+pos.y+'-'+pos.z;
+	pieza.id = posicion;
+	//Agregar pieza a la colección y a la matriz tridimensional
+	array_piezas.push(new Pieza(pieza, color, pos));
+	CUBO.RUBIK[pos.x][pos.y][pos.z] = new Pieza(pieza, color, pos);
 
-	var p_central = crearElemento('span', {class:'pieza p-central'}, ladosPieza);
-	document.getElementsByClassName('cube-face')[i].appendChild(p_central);
-	CENTROS.push(p_central);
+	document.getElementsByClassName('cube-face')[0].appendChild(pieza);
 }
 
-for(let p_central of CENTROS) {
-	let ubicar = setInterval(function(){
-		p_central.style.transform = 'translateX(100%) translateY(100%) translateZ(4px)';
-		clearInterval(ubicar);
-	}, 500);
+function asignarColores() { //ASIGNAR COLORES AL AZAR AQUÍ????????
+	// let color = setInterval(function(){
+	// 	lado.style.background = CUBO.centros[i].color;
+	// 	clearInterval(color);
+	// }, 500);
 }
+//Ubicación inicial: p-central (nucleo) ¿Todas las piezas van inicialmente al centro?
+//document.getElementsByClassName('cube-face')[0].appendChild(pieza);
+//pieza.classList.add('p-central-ubicar');	
+
+// for(let p_central of CENTROS) {
+// 	let ubicar = setInterval(function(){
+// 		p_central.classList.add('p-central-ubicar');
+// 		clearInterval(ubicar);
+// 	}, 500);
+// }

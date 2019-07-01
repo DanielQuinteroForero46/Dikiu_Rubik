@@ -30,7 +30,7 @@
 .cube-face {
   width: 200px;
   height: 200px;
-  /*border: 2px solid #141414;*/
+  border: 2px solid #141414;
   /*background:  #141414;*/
   border-radius: 8px;
 }
@@ -62,3 +62,5 @@
 
 /*------------------------------------- PIEZAS CENTRALES -----------------------------------------*/
 .p-central { transform: translateX(100%) translateY(100%) translateZ(-60px); transition: transform 0.5s; }
+
+.p-central-ubicar {transform: translateX(100%) translateY(100%) translateZ(4px);}
