@@ -26,9 +26,13 @@ class CrearPiezas {
             		rest.splice(rest.indexOf(this.eje), 1); //Al segundo eje (Descartando el eje de la iteración), se le aplica el patrón -1 & 1:
                 	for (let pos of Object.values(CUBO.MOV)) {
                         this.moverEje(this.eje, lado);
-                        // console.log(this.posicion);
-                        // console.log(this.eje);
-                        this.posicion[rest[1]] += pos; this.crearModelo(CUBO.aristas, coloresAzar(CUBO.coloresAristas));
+                        this.posicion[rest[1]]+= pos;
+                        if(this.eje == 'z') { //Invertir posiciones
+                            let temp = this.posicion.x;
+                            this.posicion.x = this.posicion.z;
+                            this.posicion.z = temp;
+                        }
+                        this.crearModelo(CUBO.aristas, coloresAzar(CUBO.coloresAristas));
                     } 
                     break;
                 case 'esquina':
