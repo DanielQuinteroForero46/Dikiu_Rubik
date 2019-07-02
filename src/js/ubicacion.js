@@ -27,7 +27,7 @@ document.addEventListener('mouseup', e => { document.removeEventListener('mousem
 
 //Definir modelo 3D de la pieza:
 function pieza3D(array_piezas, pos, color) {
-	let pieza = crearElemento('span', {class:'pieza p-central'});
+	let pieza = crearElemento('span', {class:'pieza nucleo'});
 	for(let l of CUBO.LADOS) { //Definir 6 lados para cada pieza
 		let lado = crearElemento('span', {class:'pieza-face pieza-'+l});
 		lado.style.background = color;
@@ -38,23 +38,13 @@ function pieza3D(array_piezas, pos, color) {
 	//Agregar pieza a la colección y a la matriz tridimensional
 	array_piezas.push(new Pieza(pieza, color, pos));
 	CUBO.RUBIK[pos.x][pos.y][pos.z] = new Pieza(pieza, color, pos);
-
-	document.getElementsByClassName('cube-face')[0].appendChild(pieza);
 }
 
-function asignarColores() { //ASIGNAR COLORES AL AZAR AQUÍ????????
-	// let color = setInterval(function(){
-	// 	lado.style.background = CUBO.centros[i].color;
-	// 	clearInterval(color);
-	// }, 500);
-}
-//Ubicación inicial: p-central (nucleo) ¿Todas las piezas van inicialmente al centro?
-//document.getElementsByClassName('cube-face')[0].appendChild(pieza);
-//pieza.classList.add('p-central-ubicar');	
+//Ubicación inicial: p-central (nucleo) ¿Todas las piezas se ubican inicialmente al centro?
 
-// for(let p_central of CENTROS) {
-// 	let ubicar = setInterval(function(){
-// 		p_central.classList.add('p-central-ubicar');
-// 		clearInterval(ubicar);
-// 	}, 500);
-// }
+//function asignarColores() { //ASIGNAR COLORES AL AZAR AQUÍ????????
+//	 let color = setInterval(function(){
+//	 	lado.style.background = CUBO.centros[i].color;
+//	 	clearInterval(color);
+//	 }, 500);
+//}

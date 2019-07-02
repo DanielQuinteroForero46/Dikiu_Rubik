@@ -1,4 +1,4 @@
-'use strict'; window.onload = crearPiezas;
+'use strict';
 /*------------------------------------------------------------------------------------------------------*/
 class CrearPiezas {
     constructor(pieza, eje) {
@@ -51,20 +51,4 @@ class CrearPiezas {
     crearModelo(array_piezas, color) {
         pieza3D(array_piezas, {x:this.posicion.x, y:this.posicion.y, z:this.posicion.z}, color);
     }
-}
-
-function crearPiezas() { /*Por cada eje se crea: 2 centros | 4 aristas | 4 esquinas*/
-  	for(let eje in CUBO.NUCLEO) {
-  		var centros = new CrearPiezas('centro', eje); /*2 centros opuestos (CARA - CONTRACARA)*/
-  		centros.crear();
-
-  		var aristas = new CrearPiezas('arista', eje); /*4 aristas opuestas (CARA - CONTRACARA)*/
-  		aristas.crear();
-
-        if (eje == 'z') break; //Las esquinas se ubican en las dos primeras iteraciones (4 por cada iteración)
-
-  		var esquinas = new CrearPiezas('esquina', eje); /*4 esquinas opuestas (CARA - CONTRACARA)*/
-  		esquinas.crear();
-  	}
-    console.log(CUBO.centros); console.log(CUBO.aristas); console.log(CUBO.esquinas); console.log(CUBO.RUBIK);
 }

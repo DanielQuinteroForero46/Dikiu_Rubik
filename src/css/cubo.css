@@ -1,4 +1,5 @@
-.cube, .cube-face, .pieza, .pieza-face {position: absolute; transform-style: preserve-3d;}
+.cube, .cube-face, .pieza, .pieza-face { position: absolute; transform-style: preserve-3d;
+}
 
 .space {
   position: relative;
@@ -11,12 +12,12 @@
 }
 
 /*-------------------------- CUBO: ROTACIÓN DE LAS 6 CARAS ---------------------------------------*/
-.cube-front, .pieza-front  { transform: rotateY(0deg) translateZ(99px); }
-.cube-back, .pieza-back  { transform: rotateY(180deg) translateZ(99px); }
-.cube-top, .pieza-top  { transform: rotateX(90deg) translateZ(99px); }
-.cube-bottom, .pieza-bottom  { transform: rotateX(-90deg) translateZ(99px); }
-.cube-right, .pieza-right  { transform: rotateY(90deg) translateZ(99px); }
-.cube-left, .pieza-left  { transform: rotateY(-90deg) translateZ(99px); }
+.cube-front { transform: rotateY(0deg) translateZ(99px); }
+.cube-back { transform: rotateY(180deg) translateZ(99px); }
+.cube-top { transform: rotateX(90deg) translateZ(99px); }
+.cube-bottom { transform: rotateX(-90deg) translateZ(99px); }
+.cube-right { transform: rotateY(90deg) translateZ(99px); }
+.cube-left { transform: rotateY(-90deg) translateZ(99px); }
 
 /*------------------------------------------------------------------------------------------------*/
 .cube {
@@ -46,9 +47,11 @@
 /*------------------------------------------------------------------------------------------------*/
 
 .pieza {
-  margin: 3px;
-  width: 33.3%;
-  height: 33.3%;
+    top: 0; bottom: 0; right: 0; left: 0;
+    margin: auto; /*margin: 3px;*/
+    width: 33.3%;
+    height: 33.3%;
+    transition: transform 0.5s;
 }
 
 .pieza-face {
@@ -60,7 +63,11 @@
   transition: background 3s;
 }
 
-/*------------------------------------- PIEZAS CENTRALES -----------------------------------------*/
-.p-central { transform: translateX(100%) translateY(100%) translateZ(-60px); transition: transform 0.5s; }
+/*------------------------------------- UBICACIÓN DE PIEZAS -----------------------------------------*/
+.nucleo { transform: translateZ(-60px); } /*Ubicación inicial*/
 
-.p-central-ubicar {transform: translateX(100%) translateY(100%) translateZ(4px);}
+.p-ubicar {transform: translateZ(5px);}
+
+.arista-cara { transform: translateX(-10%) translateY(100%) translateZ(4px); }
+
+.arista-contracara { transform: translateX(205%) translateY(100%) translateZ(4px); }
