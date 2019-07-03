@@ -27,7 +27,7 @@ document.addEventListener('mouseup', e => { document.removeEventListener('mousem
 
 //Definir modelo 3D de la pieza:
 function pieza3D(array_piezas, pos, color) {
-	let pieza = crearElemento('span', {class:'pieza nucleo'});
+    let pieza = crearElemento('span', { class:'pieza nucleo'});
 	for(let l of CUBO.LADOS) { //Definir 6 lados para cada pieza
 		let lado = crearElemento('span', {class:'pieza-face pieza-'+l});
 		lado.style.background = color;

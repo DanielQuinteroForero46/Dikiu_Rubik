@@ -31,7 +31,7 @@
 .cube-face {
   width: 200px;
   height: 200px;
-  border: 2px solid #141414;
+  /*border: 2px solid #141414;*/
   /*background:  #141414;*/
   border-radius: 8px;
 }
@@ -60,14 +60,13 @@
   height: 85%;
   border: 4px solid #141414;
   background: #ced6e0;
-  transition: background 3s;
 }
 
 /*------------------------------------- UBICACIÓN DE PIEZAS -----------------------------------------*/
 .nucleo { transform: translateZ(-60px); } /*Ubicación inicial*/
 
-.p-ubicar {transform: translateZ(5px);}
+.cara-centro {transform: translateZ(5px);}
 
-.arista-cara { transform: translateX(-10%) translateY(100%) translateZ(4px); }
-
-.arista-contracara { transform: translateX(205%) translateY(100%) translateZ(4px); }
+.cara-arista {
+    transform: translateX(-100%);
+}

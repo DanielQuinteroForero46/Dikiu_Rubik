@@ -4,32 +4,80 @@ document.addEventListener('DOMContentLoaded', function () {
 
     for (let l in CUBO.LADOS) { //try catch
         let pieza = CUBO.centros[l].pieza3D;
-
         document.getElementsByClassName('cube-' + CUBO.LADOS[l])[0].appendChild(pieza);
+
         let ubicar = setInterval(function () {
-            pieza.classList.add('p-ubicar');
+            pieza.classList.add('cara-centro');
             clearInterval(ubicar);
         }, 1000);
 
     }
 
-    ////FRONT
-    //let pieza = CUBO.aristas[0].pieza3D;
-    //document.getElementsByClassName('cube-front')[0].appendChild(pieza);
-    //pieza.style.transform = 'translate3d(0, 100%, 4px)'; // 0 1 0
+    //FRONT - LEFT
+    let pieza = CUBO.aristas[0].pieza3D;
+    document.getElementsByClassName('cube-front')[0].appendChild(pieza); // 0 1 0
+    //pieza.style.transform = 'translateX(-100%)';
+    pieza.classList.add('cara-arista');
 
-    //pieza = CUBO.aristas[2].pieza3D;
-    //document.getElementsByClassName('cube-front')[0].appendChild(pieza);
-    //pieza.style.transform = 'translate3d(200%, 100%, 4px)'; // 2 1 0
+//    //BACK - LEFT
+//    pieza = CUBO.aristas[1].pieza3D;
+//    document.getElementsByClassName('cube-back')[0].appendChild(pieza); // 0 1 2
+//    pieza.style.transform = 'translateX(100%)';
 
-    ////BACK
-    //pieza = CUBO.aristas[1].pieza3D;
-    //document.getElementsByClassName('cube-back')[0].appendChild(pieza);
-    //pieza.style.transform = 'translate3d(200%, 100%, 4px)'; // 0 1 2 
+///*---------------------------------------------------------------------------*/
 
-    //pieza = CUBO.aristas[3].pieza3D;
-    //document.getElementsByClassName('cube-back')[0].appendChild(pieza);
-    //pieza.style.transform = 'translate3d(0, 100%, 4px)'; // 2 1 2
+//    //FRONT - RIGHT
+//    pieza = CUBO.aristas[2].pieza3D;
+//    document.getElementsByClassName('cube-front')[0].appendChild(pieza); // 2 1 0
+//    pieza.style.transform = 'translateX(100%)';
+
+//    //BACK - RIGHT
+//    pieza = CUBO.aristas[3].pieza3D;
+//    document.getElementsByClassName('cube-back')[0].appendChild(pieza); // 2 1 2
+//    pieza.style.transform = 'translateX(-100%)';
+
+//    //TOP - FRONT
+//    pieza = CUBO.aristas[4].pieza3D;
+//    document.getElementsByClassName('cube-top')[0].appendChild(pieza); // 1 0 0
+//    pieza.style.transform = 'translateY(100%)';
+
+//    //TOP - BACK
+//    pieza = CUBO.aristas[5].pieza3D;
+//    document.getElementsByClassName('cube-top')[0].appendChild(pieza); // 1 0 2
+//    pieza.style.transform = 'translateY(-100%)';
+
+///*---------------------------------------------------------------------------*/
+
+//    //BOTTOM - FRONT
+//    pieza = CUBO.aristas[6].pieza3D;
+//    document.getElementsByClassName('cube-bottom')[0].appendChild(pieza); // 1 2 0
+//    pieza.style.transform = 'translateY(-100%)';
+
+//    //BOTTOM - BACK
+//    pieza = CUBO.aristas[7].pieza3D;
+//    document.getElementsByClassName('cube-bottom')[0].appendChild(pieza); // 1 2 2
+//    pieza.style.transform = 'translateY(100%)';
+
+
+//    //LEFT - TOP
+//    pieza = CUBO.aristas[8].pieza3D;
+//    document.getElementsByClassName('cube-left')[0].appendChild(pieza); // 0 0 1
+//    pieza.style.transform = 'translateY(-100%)';
+
+//    //LEFT  - BOTTOM
+//    pieza = CUBO.aristas[9].pieza3D;
+//    document.getElementsByClassName('cube-left')[0].appendChild(pieza); // 0 2 1 
+//    pieza.style.transform = 'translateY(100%)';
+
+//    //RIGHT - TOP 
+//    pieza = CUBO.aristas[10].pieza3D;
+//    document.getElementsByClassName('cube-right')[0].appendChild(pieza); // 2 0 1
+//    pieza.style.transform = 'translateY(-100%)';
+
+//    //RIGHT- BOTTOM
+//    pieza = CUBO.aristas[11].pieza3D;
+//    document.getElementsByClassName('cube-right')[0].appendChild(pieza); // 2 2 1
+//    pieza.style.transform = 'translateY(100%)';
 
 });
 
