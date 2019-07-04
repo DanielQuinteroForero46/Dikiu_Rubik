@@ -2,22 +2,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
     crearPiezas();
 
-    for (let l in CUBO.LADOS) { //try catch
-        let pieza = CUBO.centros[l].pieza3D;
-        document.getElementsByClassName('cube-' + CUBO.LADOS[l])[0].appendChild(pieza);
+    //GUARDAR POSICIÓN INICIAL EN UN OBJETO (¿Realizar la ubicación en el método de pieza3D?)
+    const PIEZA = {
+        init: {x:'0', y:'0', z:'30px'} //Ubicación inicial de cada pieza (nucleo)
+    }
+    let ejesCubo = { x: ['-100%', '100%'], y: ['-100%', '100%'], z: ['-30px', '30px'] };
+    for (let eje of Object.keys(PIEZA.init)) { //try catch
+        let pieza = CUBO.centros[0].pieza3D;
+        cubo3D.appendChild(pieza);
+        PIEZA.init[eje] = ejesCubo[eje][0];
+        pieza.style.transform = 'translate3d(' + PIEZA.init.x, PIEZA.init.y, PIEZA.init.z + ')';
 
-        let ubicar = setInterval(function () {
-            pieza.classList.add('cara-centro');
-            clearInterval(ubicar);
-        }, 1000);
+        PIEZA.init = { x: '0', y: '0', z: '30px' };
+        cubo3D.appendChild(pieza);
+        PIEZA.init[eje] = ejesCubo[eje][1];
+        pieza.style.transform = 'translate3d(' + PIEZA.init.x + ', ' + PIEZA.init.y + ', ' +  PIEZA.init.z + ')';
 
+        console.log(eje);
     }
 
     //FRONT - LEFT
-    let pieza = CUBO.aristas[0].pieza3D;
-    document.getElementsByClassName('cube-front')[0].appendChild(pieza); // 0 1 0
-    //pieza.style.transform = 'translateX(-100%)';
-    pieza.classList.add('cara-arista');
+    //let pieza = CUBO.aristas[0].pieza3D;
+    //document.getElementsByClassName('cube-front')[0].appendChild(pieza); // 0 1 0
+    ////pieza.style.transform = 'translateX(-100%)';
+    //pieza.classList.add('cara-arista');
 
 //    //BACK - LEFT
 //    pieza = CUBO.aristas[1].pieza3D;

@@ -31,7 +31,7 @@
 .cube-face {
   width: 200px;
   height: 200px;
-  /*border: 2px solid #141414;*/
+  border: 2px solid #141414;
   /*background:  #141414;*/
   border-radius: 8px;
 }
@@ -63,9 +63,12 @@
 }
 
 /*------------------------------------- UBICACIÓN DE PIEZAS -----------------------------------------*/
-.nucleo { transform: translateZ(-60px); } /*Ubicación inicial*/
+.nucleo { transform: translateZ(30px) } /*Ubicación inicial*/
 
 .cara-centro {transform: translateZ(5px);}
+
+.centroIzq { transform: translateZ(30px) translateX(-100%);}
+.centroDer {transform: translateZ(30px) translateX(100%); }
 
 .cara-arista {
     transform: translateX(-100%);
