@@ -6,19 +6,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const PIEZA = {
         init: {x:'0', y:'0', z:'30px'} //Ubicación inicial de cada pieza (nucleo)
     }
-    let ejesCubo = { x: ['-100%', '100%'], y: ['-100%', '100%'], z: ['-30px', '30px'] };
-    for (let eje of Object.keys(PIEZA.init)) { //try catch
-        let pieza = CUBO.centros[0].pieza3D;
-        cubo3D.appendChild(pieza);
-        PIEZA.init[eje] = ejesCubo[eje][0];
-        pieza.style.transform = 'translate3d(' + PIEZA.init.x, PIEZA.init.y, PIEZA.init.z + ')';
+    let ejesCubo = { x: ['-100%', '100%'], y: ['-100%', '100%'], z: ['-35px', '95px'] };
 
+    let pieza = null, c = 0;
+    for (let eje of Object.keys(PIEZA.init)) { //try catch
+        for (let cara of Object.values(CUBO.MOV)) {
+            pieza = CUBO.centros[c].pieza3D;
+            ubicarCentro(eje, cara);
+            c++;
+        }
+    }
+
+    function ubicarCentro(eje, lado) {
         PIEZA.init = { x: '0', y: '0', z: '30px' };
         cubo3D.appendChild(pieza);
-        PIEZA.init[eje] = ejesCubo[eje][1];
-        pieza.style.transform = 'translate3d(' + PIEZA.init.x + ', ' + PIEZA.init.y + ', ' +  PIEZA.init.z + ')';
 
-        console.log(eje);
+        let cara = CUBO.NUCLEO[eje] += lado;
+        PIEZA.init[eje] = ejesCubo[eje][cara];
+        pieza.style.transform = 'translate3d(' + PIEZA.init.x + ', ' + PIEZA.init.y + ', ' + PIEZA.init.z + ')';
     }
 
     //FRONT - LEFT
