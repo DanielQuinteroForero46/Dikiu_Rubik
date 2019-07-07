@@ -1,54 +1,60 @@
 'use strict';
-/*------------------------------------------------------------------------------------------------------*/
-class CrearPiezas {
-    constructor(pieza, eje) {
-        this.pieza = pieza;
-        this.eje = eje;
-	    this.moverEje = function(eje, lado) { //Asignar el movimiento del eje que se encuentra en iteración: -1 || 1
-	        this.posicion = Object.assign({}, CUBO.NUCLEO);
-	        this.posicion[eje]+= parseInt(lado);
-	    }
+
+class CrearPiezas extends UbicacionMatriz {
+    /*------------------------------ CREAR Y UBICAR PIEZAS EN LA INTERFAZ --------------------------------------*/
+    constructor(tipoPieza, eje, grupoColores) {
+        super(eje);
+        this.tipoPieza = tipoPieza;
+        this.grupoColores = grupoColores;
+
+        this.coordenadas();
     }
 
-    //Determinar coordenadas y color(es) de cada pieza, partiendo desde el nucleo del cubo (1,1,1) y ubicándose en un lado correspondiente
-    crear() {
+    //Definir posición de dos piezas (Cara - Contracara)
+    coordenadas() {
         for (let lado of Object.values(CUBO.MOV)) { //Cara - Contracara. Por cada iteración: 2 centros,  4 aristas, 4 esquinas
             this.moverEje(this.eje, lado);
 
-            switch(this.pieza) {
-                case 'centro':
-                    let c = Object.values(CUBO.MOV).indexOf(lado); //Ubicación del color de acuerdo al lado: -1 -> cara, 1: contracara
-                    var color = CUBO.COLORES[this.eje][c];
-                    this.crearModelo(CUBO.centros, color);
-                    break;
+            switch(this.tipoPieza) {
+                case 'centro': this.crear(); break;
+
                 case 'arista':
-                	var rest = Object.keys(this.posicion);  //Descartar eje de la iteración, guardar ejes restantes
-            		rest.splice(rest.indexOf(this.eje), 1); //Al segundo eje (Descartando el eje de la iteración), se le aplica el patrón -1 & 1:
-                	for (let pos of Object.values(CUBO.MOV)) {
-                        this.moverEje(this.eje, lado);
-                        this.posicion[rest[1]]+= pos;
-                        if(this.eje == 'z') { //Invertir posiciones
-                            let temp = this.posicion.x;
-                            this.posicion.x = this.posicion.z;
-                            this.posicion.z = temp;
-                        }
-                        this.crearModelo(CUBO.aristas, coloresAzar(CUBO.coloresAristas));
-                    } 
+                    for (let pos of Object.values(CUBO.MOV)) {
+                        super.ubic_Arista(lado, pos);
+                        this.crear();
+                    }
                     break;
                 case 'esquina':
-                	let updown = Object.keys(CUBO.NUCLEO).indexOf(this.eje) * 2; //Esquinas superiores: 0 | Esquinas inferiores: 1
-                	for (let posZ of Object.values(CUBO.MOV)) { //Posición del eje z (FRONT || BACK)
-	                    this.moverEje('x', lado); //Unificar enviando los tres valores (lado - updown - pos)
-	                    this.posicion['y'] = updown;
-                        this.posicion['z'] += posZ;
-                        this.crearModelo(CUBO.esquinas, coloresAzar(CUBO.coloresEsquinas));
-                	} 
-                	break;
+                    let updown = Object.keys(CUBO.NUCLEO).indexOf(this.eje) * 2; //Esquinas superiores: 0 | Esquinas inferiores: 1
+                    for (let posZ of Object.values(CUBO.MOV)) { //Posición del eje z (FRONT || BACK)
+                        super.ubic_Esquina(lado, posZ, updown);
+                        this.crear();
+                    } 
+                    break;
             }
-      	}
+        }
     }
 
-    crearModelo(array_piezas, color) {
-        pieza3D(array_piezas, {x:this.posicion.x, y:this.posicion.y, z:this.posicion.z}, color);
+    crear() {
+        if(this.grupoColores == CUBO.colorCentros) var color = colorCentro(this.grupoColores);
+        else var color = colores(this.grupoColores);
+
+        let spanPieza = crearElemento('span', { class:'pieza '+this.tipoPieza});
+        for(let l of PIEZA.LADOS) { //Definir 6 lados para cada pieza
+            let lado = crearElemento('span', {class:'pieza-face pieza-'+l});
+            lado.style.background = color;
+            spanPieza.appendChild(lado);
+        }
+
+        spanPieza.setAttribute('data-x', this.pos.x);
+        spanPieza.setAttribute('data-y', this.pos.y);
+        spanPieza.setAttribute('data-z', this.pos.z);
+        
+        cubo3D.appendChild(spanPieza);
+        let pieza = new Pieza(spanPieza, this.pos, color);
+        pieza.ubicarCentro(this.eje);
+        //Agregar pieza a la colección y a la matriz tridimensional
+        CUBO.RUBIK[this.pos.x][this.pos.y][this.pos.z] = pieza;
     }
+
 }

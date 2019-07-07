@@ -1,50 +1,32 @@
-/*---------------------------------------- ROTACIÓN DEL CUBO ----------------------------------------------*/
-let space = document.querySelector('.space');
-let cubo3D = document.querySelector('.cube');
-let x = -30, y = 30; //Posición inicial del cubo (rotateX & rotateY)
+'use strict'
+/*------------------------------------------------------------------------------------------------------*/
+class UbicacionMatriz {
 
-/*--------------------------------------------------------*/
-let girarCubo = (x,y) => {cubo3D.style.transform = "rotateX("+x+"deg) rotateY("+y+"deg)";}
+    constructor(eje) {
+        this.eje = eje;
+        this.pos = Object.assign({}, CUBO.NUCLEO); //Punto de partida para la ubicación de cada piezas
+	    this.moverEje = function(eje, lado) { //Asignar el movimiento del eje que se encuentra en iteración: -1 || 1
+	        this.pos = Object.assign({}, CUBO.NUCLEO);
+	        this.pos[eje]+= parseInt(lado);
+	    }
+    }
 
-let giroInicial = setInterval(function(){
-	girarCubo(x,y);
-	clearInterval(giroInicial);
-}, /*1000*/);
+    //Determinar coordenadas de cada pieza, partiendo desde el nucleo del cubo (1,1,1) y ubicándose en un lado correspondiente
+    ubic_Arista(lado, pos) {
+        this.moverEje(this.eje, lado);
+        var rest = Object.keys(this.pos);  //Descartar eje de la iteración, guardar ejes restantes
+        rest.splice(rest.indexOf(this.eje), 1); //Al segundo eje (Descartando el eje de la iteración), se le aplica el patrón -1 & 1:
+        this.pos[rest[1]]+= pos;
+        if(this.eje == 'z') { //Invertir posiciones
+            let temp = this.pos.x;
+            this.pos.x = this.pos.z;
+            this.pos.z = temp;
+        }
+    }
 
-let desplazar = e => {
-	cubo3D.style.transition = 'transform 0s'; //Rotación inmediata
-	x-= e.movementY; y+= e.movementX; //Desplazar el mouse en el eje "x" provoca la rotación del eje "y" y visceversa
-	girarCubo(x,y);
+    ubic_Esquina(lado, posZ, updown) {
+        this.moverEje('x', lado); //Unificar enviando los tres valores (lado - updown - pos)
+        this.pos['y'] = updown;
+        this.pos['z'] += posZ;
+    }
 }
-/*---------------------------------------- Eventos de giro -------------------------------------------------*/
-space.addEventListener( 'mousedown', e => {
-	if(e.button === 0 && e.target == space) document.addEventListener('mousemove', desplazar);
-});
-document.addEventListener('mouseup', e => { document.removeEventListener('mousemove', desplazar); });
-
-
-/*------------------------------ CREAR Y UBICAR PIEZAS EN LA INTERFAZ --------------------------------------*/
-
-//Definir modelo 3D de la pieza:
-function pieza3D(array_piezas, pos, color) {
-    let pieza = crearElemento('span', { class:'pieza nucleo'});
-	for(let l of CUBO.LADOS) { //Definir 6 lados para cada pieza
-		let lado = crearElemento('span', {class:'pieza-face pieza-'+l});
-		lado.style.background = color;
-		pieza.appendChild(lado);
-	}
-	let posicion = pos.x+'-'+pos.y+'-'+pos.z;
-	pieza.id = posicion;
-	//Agregar pieza a la colección y a la matriz tridimensional
-	array_piezas.push(new Pieza(pieza, color, pos));
-	CUBO.RUBIK[pos.x][pos.y][pos.z] = new Pieza(pieza, color, pos);
-}
-
-//Ubicación inicial: p-central (nucleo) ¿Todas las piezas se ubican inicialmente al centro?
-
-//function asignarColores() { //ASIGNAR COLORES AL AZAR AQUÍ????????
-//	 let color = setInterval(function(){
-//	 	lado.style.background = CUBO.centros[i].color;
-//	 	clearInterval(color);
-//	 }, 500);
-//}

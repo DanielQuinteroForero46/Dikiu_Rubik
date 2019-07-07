@@ -3,11 +3,8 @@ const CUBO = {
     RUBIK: new Array(3), //Matriz multidimensional en la cual se almacenará cada pieza representada como un objeto.
     NUCLEO: {x:1, y:1, z:1}, //Eje central del cubo, a partir del cual se ubicarán las piezas.
     MOV: {uno:-1, dos:1}, //MOVIMIENTO: Dirección de movimiento de cada eje con respecto al nucleo
-    LADOS: ['front','back', 'right', 'left', 'top', 'bottom'],
     COLORES: { x: ['#FFD500', '#FFFFFF'], y: ['#009B48', '#0045AD'], z: ['#FF5900', '#B90000'] }, /*  Amarillo, Blanco  |  Verde, Azul  |  Rojo, Naranja */
-    centros: [],
-    aristas: [],
-    esquinas: [],
+    colorCentros: ['#FFD500', '#FFFFFF', '#009B48', '#0045AD', '#FF5900', '#B90000'],
     coloresAristas: [],
     coloresEsquinas: []
 }
@@ -19,45 +16,27 @@ for(let x = 0; x < CUBO.RUBIK.length; x++) {
   }
 }
 /*-------------------------------------------------------------------------------------------------------------------------------*/
-/*PIEZAS (27):*/
-class Pieza {
-    constructor(pieza3D, color, posicion) {
-        this.pieza3D = pieza3D;
-        this.color = color;
-        this.posicion = posicion;
-    }
+
+/*---------------------------------------- ROTACIÓN DEL CUBO ----------------------------------------------*/
+let space = document.querySelector('.space');
+let cubo3D = document.querySelector('.cube');
+let x = -30, y = 30; //Posición inicial del cubo (rotateX & rotateY)
+
+/*--------------------------------------------------------*/
+let girarCubo = (x,y) => {cubo3D.style.transform = "rotateX("+x+"deg) rotateY("+y+"deg)";}
+
+let giroInicial = setInterval(function(){
+    girarCubo(x,y);
+    clearInterval(giroInicial);
+}, /*1000*/);
+
+let desplazar = e => {
+    cubo3D.style.transition = 'transform 0s'; //Rotación inmediata
+    x-= e.movementY; y+= e.movementX; //Desplazar el mouse en el eje "x" provoca la rotación del eje "y" y visceversa
+    girarCubo(x,y);
 }
-
-coloresAristas('x'); //Las 12 combinaciones de colores se ubican tomando como referencia únicamente los ejes "x" y "y"
-coloresAristas('y');
-coloresEsquinas();
-
-function coloresAristas(eje) { //Combinar cada color color con los demás, exceptuando el que se encuentra en el mismo eje (Contracara)
-    let idx = Object.keys(CUBO.COLORES).indexOf(eje) + 1; //index del eje (y || z)
-    for(let c = idx; c <= 2; c++) { //Se combina con los colores del eje siguiente
-        for(let color1 of CUBO.COLORES[eje]) { //Tomar cada color de cada eje (2 colores por eje)
-            let eje2 = Object.keys(CUBO.COLORES)[c];
-            for(let color2 of CUBO.COLORES[eje2]) {
-                CUBO.coloresAristas.push(color1+"-"+color2); //2 colores por cada arista
-            }
-        }
-    }
-}
-
-function coloresEsquinas() {
-    for (let color1 of CUBO.COLORES.x) {
-        for (let color2 of CUBO.COLORES.y) {
-            for (let color3 of CUBO.COLORES.z) {
-                CUBO.coloresEsquinas.push(color1 + '-' + color2 + '-' + color3);
-            }
-        }
-    }
-}
-
-
-function coloresAzar(colores_pieza) {
-    let i = Math.floor(Math.random() * colores_pieza.length);
-    let colores = colores_pieza[i];
-    colores_pieza.splice(i, 1); //Una vez tomados los colores para la pieza, se eliminan del array 
-    return colores;
-}
+/*---------------------------------------- Eventos de giro -------------------------------------------------*/
+space.addEventListener( 'mousedown', e => {
+    if(e.button === 0 && e.target == space) document.addEventListener('mousemove', desplazar);
+});
+document.addEventListener('mouseup', e => { document.removeEventListener('mousemove', desplazar); });
