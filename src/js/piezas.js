@@ -1,8 +1,9 @@
+'use strict';
 const PIEZA = {
     LADOS: ['front','back', 'right', 'left', 'top', 'bottom'],
     MOV: {x:100, y:100, z:65} //Patrón de movimiento en cada eje
 }
-/*------------------------------------- CREAR Y UBICAR PIEZAS EN EL CUBO -------------------------------------*/ 'use strict';
+/*------------------------------------- CREAR Y UBICAR PIEZAS EN EL CUBO -------------------------------------*/
 class Pieza extends UbicacionMatriz {
     constructor(tipoPieza, eje) {
         super(tipoPieza, eje);
@@ -15,16 +16,14 @@ class Pieza extends UbicacionMatriz {
         this.color = colores(this.tipoPieza);
         this.propiedades();
         this.dimension3d();
+        this.posicion(this.eje);
         
-        switch(this.tipoPieza) {
-            case 'centro':
-                this.pieza3D.childNodes[0].style.background = this.color;
-                this.posicionCentro(); break;
+        switch(this.tipoPieza) { //La ubicacion de cada centro se define moviendo únicamente la posición del eje en iteración
             case 'arista':
                 this.posicionArista(); break;
                 break;
             case 'esquina':
-                //lado.style.background = this.color;
+                this.posicionEsquina(); break;
                 break;
         }
         this.guardarPieza();
@@ -41,32 +40,41 @@ class Pieza extends UbicacionMatriz {
     dimension3d() {
         for(let l of PIEZA.LADOS) { //Definir 6 lados para cada pieza
             let lado = crearElemento('span', {class:'pieza-face pieza-'+l});
+            lado.style.background = this.color; //Se aplica a todas la piezas, pero se reasignará para las aristas y las esquinas
             this.pieza3D.appendChild(lado);
         }
     }
 
+    
+/*---------------------------- PATRÓN DE UBICACIÓN EN EL CUBO --------------------------------*/
+    posicion(e) {
+        this.posicion3D[e]+= (this.pos[e] * PIEZA.MOV[e] ) - PIEZA.MOV[e];
+    }
+
+    posicionArista() {
+        if(this.eje == 'x' || this.eje == 'y') this.posicion('z');
+        else if(this.eje == 'z') {
+            this.posicion('y');
+            this.posicion('x');
+        }
+    }
+
+    posicionEsquina() {
+        if(this.eje == 'y') this.posicion('x');
+        else this.posicion('y');
+        this.posicion('z');
+    }
+
+/*---------------------------------------------------------------------------------------------*/
     guardarPieza() {
         CUBO.RUBIK[this.pos.x][this.pos.y][this.pos.z] = this;
         cubo3D.appendChild(this.pieza3D);
     }
 
-
-    /*UBICAR PIEZAS EN EL CUBO*/
-    posicionCentro() {
-        this.posicion3D[this.eje]+= 
-            (this.pos[this.eje] * PIEZA.MOV[this.eje] ) - PIEZA.MOV[this.eje];
-    }
-
-    posicionArista() {
-        this.posicion3D.x+= 100;
-        this.posicion3D.y+= -100;
-        this.posicion3D.z+= 65;
-    }
-
     ubicarPieza() {
-        let pieza = this.pieza3D, x = this.posicion3D.x, y = this.posicion3D.y, z = this.posicion3D.z;
+        let p = this.pieza3D, x = this.posicion3D.x, y = this.posicion3D.y, z = this.posicion3D.z;
         let animation = setInterval(function(){
-            pieza.style.transform = 'translate3d(' + x + '%, ' + y + '%, ' + z + 'px)';
+            p.style.transform = 'translate3d('+x+'%,'+y+'%,'+z+'px)';
             clearInterval(animation);
         }, 1000);
     }
