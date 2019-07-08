@@ -1,5 +1,5 @@
 //CREAR ELEMENTOS PERSONALIZADOS EN JS:
-const crearElemento = (elemento, atributos, hijos) => { //Recibe el un String del elemento y dos objetos: los atributos y los hijos
+const crearElemento = (elemento, atributos, hijos) => { //Recibe un String del elemento y dos objetos: los atributos y los hijos
 	let miElemento = document.createElement(elemento); //Crear elemento
 	
 	if(hijos !== undefined) hijos.forEach(elm => { //Si se enviaron elementos hijos se recorre el objeto para agregarlos a la etiqueta
@@ -17,7 +17,7 @@ const crearElemento = (elemento, atributos, hijos) => { //Recibe el un String de
 
 const agregarAtributos = (miElemento, atributosObj) => {//Añadir el objeto de atributos al elemento
 	for(let atr in atributosObj) {
-		// Preguntar si el objeto tiene en sí mismo ese atributo (Podría estar heredando el atributo y genere un problema)
+		// Preguntar si el objeto tiene en sí mismo ese atributo (Podría estar heredando el atributo y genera un problema)
 		if(atributosObj.hasOwnProperty(atr)) miElemento.setAttribute(atr, atributosObj[atr]);
 	}
 	return miElemento;

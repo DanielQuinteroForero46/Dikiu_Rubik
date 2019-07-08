@@ -34,10 +34,11 @@
 
 .pieza {
     top: 0; bottom: 0; right: 0; left: 0;
-    margin: auto; /*margin: 3px;*/
+    margin: auto;
     width: 33.3%;
     height: 33.3%;
     transition: transform 0.5s;
+    transform: translateZ(30px);
 }
 
 .pieza-face {
@@ -45,7 +46,5 @@
   width: 85%;
   height: 85%;
   border: 4px solid #141414;
-  background: #ced6e0;
+  background: linear-gradient(to top, #c7ecee, #ecf0f1);
 }
-
-/*------------------------------------- UBICACIÓN DE PIEZAS -----------------------------------------*/
