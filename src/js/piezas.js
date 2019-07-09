@@ -20,10 +20,11 @@ class Pieza extends UbicacionMatriz {
         
         switch(this.tipoPieza) { //La ubicacion de cada centro se define moviendo únicamente la posición del eje en iteración
             case 'arista':
-                this.posicionArista(); break;
+                this.posicionArista();
+                this.ubicarColoresAris();
                 break;
             case 'esquina':
-                this.posicionEsquina(); break;
+                this.posicionEsquina();
                 break;
         }
         this.guardarPieza();
@@ -63,6 +64,18 @@ class Pieza extends UbicacionMatriz {
         if(this.eje == 'y') this.posicion('x');
         else this.posicion('y');
         this.posicion('z');
+    }
+
+    ubicarColoresAris() {
+        let caras = { x:['left', 'right'], y:['top', 'bottom'], z:['back','front'], }
+        let color = this.color.split('-');
+
+        // for(let e of Object.keys(this.pos)) {
+        //     if(this.pos[e] != 1) {
+        //         console.log(caras[e][cl]);
+        //         console.log(this.pieza3D.getElementsByClassName('pieza-'+caras[e][cl])[0]);
+        //     }
+        // }
     }
 
 /*---------------------------------------------------------------------------------------------*/

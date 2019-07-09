@@ -1,5 +1,4 @@
-.cube, .cube-face, .pieza, .pieza-face { position: absolute; transform-style: preserve-3d;
-}
+.cube, .cube-face, .pieza, .pieza-face { position: absolute; transform-style: preserve-3d; }
 
 .space {
   position: relative;
@@ -7,7 +6,7 @@
   width: 600px;
   height: 600px;
   perspective: 1200px;
-  transform-style: preserve-3d; /*transform: scale(2.5);*/
+  transform-style: preserve-3d; /*transform: scale(2);*/
   border: 4px solid #2c3e50;
 }
 
@@ -23,12 +22,12 @@
 
 
 /*-------------------------- PIEZAS: ROTACIÓN DE LAS 6 CARAS -------------------------------------*/
-.pieza-front {transform: rotateY(0deg) translateZ(1px); }
-.pieza-back  { transform: rotateY(180deg) translateZ(63px); }
+.pieza-left  { transform: rotateY(-90deg) translateZ(32px) translateX(-48%); }
+.pieza-right {transform: rotateY(90deg) translateZ(32px) translateX(48%); }
 .pieza-top  { transform: rotateX(90deg) translateZ(32px) translateY(-48%); }
 .pieza-bottom  { transform: rotateX(-90deg) translateZ(32px) translateY(48%); }
-.pieza-right {transform: rotateY(90deg) translateZ(32px) translateX(48%); }
-.pieza-left  { transform: rotateY(-90deg) translateZ(32px) translateX(-48%); }
+.pieza-front {transform: rotateY(0deg) translateZ(1px); }
+.pieza-back  { transform: translateZ(-63px); }
 
 /*------------------------------------------------------------------------------------------------*/
 
@@ -37,7 +36,7 @@
     margin: auto;
     width: 33.3%;
     height: 33.3%;
-    transition: transform 0.5s;
+    transition: transform 3s;
     transform: translateZ(30px);
 }
 
@@ -45,6 +44,6 @@
   border-radius: 8px;
   width: 85%;
   height: 85%;
-  border: 4px solid #141414;
+  border: 6px solid #141414;
   background: linear-gradient(to top, #95afc0, #ecf0f1);
 }

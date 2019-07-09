@@ -38,7 +38,7 @@ class UbicacionMatriz {
     coorEsquina(posX, posZ) {
         this.moverEje('x', posX);
         let posY = Object.keys(CUBO.NUCLEO).indexOf(this.eje) * 2; //Esquinas superiores: 0 | Esquinas inferiores: 1
-        this.pos['y'] = posY;
-        this.pos['z'] += posZ;
+        this.pos.y = posY;
+        this.pos.z += posZ;
     }
 }
