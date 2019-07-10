@@ -25,7 +25,7 @@ const coloresAristas = (eje) => { //Combinar cada color color con los demás, ex
         for(let color1 of CUBO.COLORES[eje]) { //Tomar cada color de cada eje (2 colores por eje)
             let eje2 = Object.keys(CUBO.COLORES)[c];
             for(let color2 of CUBO.COLORES[eje2]) {
-                CUBO.coloresAristas.push(color1+"-"+color2); //2 colores por cada arista
+                CUBO.coloresAristas.push([color1,color2]); //2 colores por cada arista
             }
         }
     }
@@ -35,7 +35,7 @@ const coloresEsquinas = () => {
     for (let color1 of CUBO.COLORES.x) {
         for (let color2 of CUBO.COLORES.y) {
             for (let color3 of CUBO.COLORES.z) {
-                CUBO.coloresEsquinas.push(color1 + '-' + color2 + '-' + color3);
+                CUBO.coloresEsquinas.push([color1, color2,color3]);
             }
         }
     }

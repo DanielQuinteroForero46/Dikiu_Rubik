@@ -36,7 +36,7 @@
     margin: auto;
     width: 33.3%;
     height: 33.3%;
-    transition: transform 3s;
+    transition: transform 0.5s;
     transform: translateZ(30px);
 }
 
@@ -45,5 +45,6 @@
   width: 85%;
   height: 85%;
   border: 6px solid #141414;
-  background: linear-gradient(to top, #95afc0, #ecf0f1);
+  /*background: linear-gradient(to top, #95afc0, #ecf0f1);*/
+  background: #1e272e;
 }

@@ -1,6 +1,7 @@
 'use strict';
 const PIEZA = {
     LADOS: ['front','back', 'right', 'left', 'top', 'bottom'],
+    CARAS: { x:['left', 'right'], y:['top', 'bottom'], z:['back','front'] },
     MOV: {x:100, y:100, z:65} //Patrón de movimiento en cada eje
 }
 /*------------------------------------- CREAR Y UBICAR PIEZAS EN EL CUBO -------------------------------------*/
@@ -25,6 +26,7 @@ class Pieza extends UbicacionMatriz {
                 break;
             case 'esquina':
                 this.posicionEsquina();
+                this.ubicarColoresEsq();
                 break;
         }
         this.guardarPieza();
@@ -67,15 +69,23 @@ class Pieza extends UbicacionMatriz {
     }
 
     ubicarColoresAris() {
-        let caras = { x:['left', 'right'], y:['top', 'bottom'], z:['back','front'], }
-        let color = this.color.split('-');
+        let c = 0;
+        for(let e of Object.keys(this.pos)) {
+            if(this.pos[e] != 1) {
+                let i = this.pos[e]/this.pos[e] || 0;
+                let cara = this.pieza3D.getElementsByClassName('pieza-'+PIEZA.CARAS[e][i])[0];
+                cara.style.background = this.color[c];
+                c++;
+            }
+        }
+    }
 
-        // for(let e of Object.keys(this.pos)) {
-        //     if(this.pos[e] != 1) {
-        //         console.log(caras[e][cl]);
-        //         console.log(this.pieza3D.getElementsByClassName('pieza-'+caras[e][cl])[0]);
-        //     }
-        // }
+    ubicarColoresEsq() {
+        for(let e of Object.keys(this.pos)) {
+            let i = this.pos[e]/this.pos[e] || 0;
+            let cara = this.pieza3D.getElementsByClassName('pieza-'+PIEZA.CARAS[e][i])[0];
+            cara.style.background = this.color[ Object.keys(this.pos).indexOf(e) ];
+        }
     }
 
 /*---------------------------------------------------------------------------------------------*/
