@@ -1,15 +1,5 @@
 /*--------------------------------Generar combinación de colores para cada tipo de pieza-----------------------------------*/
-function colores(tipoPieza) {
-    switch(tipoPieza){
-        case 'centro':
-            return colorCentro();
-        case 'arista':
-            var grupoColores = CUBO.coloresAristas;
-            break;
-        case 'esquina':
-            var grupoColores = CUBO.coloresEsquinas;
-            break;
-    }
+function colores(grupoColores) {
     let i = Math.floor(Math.random() * grupoColores.length);
     let colores = grupoColores[i];
     grupoColores.splice(i, 1); //Una vez tomados los colores para la pieza, se eliminan del array 

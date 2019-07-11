@@ -14,10 +14,10 @@ class UbicacionMatriz {
 
     coordenadas(movEje1, movEje2) {
         switch(this.tipoPieza) {        
-            case 'arista':
+            case 'aristas':
                 this.coorArista(movEje1, movEje2);
                 break;
-            case 'esquina':
+            case 'esquinas':
                 this.coorEsquina(movEje1, movEje2); //Patrón de ubicación
                 break;
         }

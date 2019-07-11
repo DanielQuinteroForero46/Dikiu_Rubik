@@ -14,18 +14,22 @@ class Pieza extends UbicacionMatriz {
 
     crear(movEje1, movEje2) {
         super.coordenadas(movEje1, movEje2); //Patrón de ubicación
-        this.color = colores(this.tipoPieza);
         this.propiedades();
         this.dimension3d();
         this.posicion(this.eje);
         
         switch(this.tipoPieza) { //La ubicacion de cada centro se define moviendo únicamente la posición del eje en iteración
-            case 'arista':
+            case 'centros':
+                this.color = colorCentro();
+                this.ubicarColorCent();
+            case 'aristas':
                 this.posicionArista();
+                this.color = colores(CUBO.coloresAristas);
                 this.ubicarColoresAris();
                 break;
-            case 'esquina':
+            case 'esquinas':
                 this.posicionEsquina();
+                this.color = colores(CUBO.coloresEsquinas);
                 this.ubicarColoresEsq();
                 break;
         }
@@ -43,7 +47,7 @@ class Pieza extends UbicacionMatriz {
     dimension3d() {
         for(let l of PIEZA.LADOS) { //Definir 6 lados para cada pieza
             let lado = crearElemento('span', {class:'pieza-face pieza-'+l});
-            lado.style.background = this.color; //Se aplica a todas la piezas, pero se reasignará para las aristas y las esquinas
+            //lado.style.background = this.color; //Se aplica a todas la piezas, pero se reasignará para las aristas y las esquinas
             this.pieza3D.appendChild(lado);
         }
     }
@@ -66,6 +70,13 @@ class Pieza extends UbicacionMatriz {
         if(this.eje == 'y') this.posicion('x');
         else this.posicion('y');
         this.posicion('z');
+    }
+
+
+    ubicarColorCent() {
+        for(let cara of this.pieza3D.children) {
+            cara.style.background = this.color;
+        }
     }
 
     ubicarColoresAris() {
