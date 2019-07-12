@@ -1,8 +1,7 @@
 'use strict';
 const PIEZA = {
-    LADOS: ['front','back', 'right', 'left', 'top', 'bottom'],
-    CARAS: { x:['left', 'right'], y:['top', 'bottom'], z:['back','front'] },
-    MOV: {x:100, y:100, z:65} //Patrón de movimiento en cada eje
+    caras: { x:['left', 'right'], y:['top', 'bottom'], z:['back','front'] },
+    MOV: {x:100, y:100, z:65} //Patrón de ubicación en cada eje: Se realiza un translate con CSS
 }
 /*------------------------------------- CREAR Y UBICAR PIEZAS EN EL CUBO -------------------------------------*/
 class Pieza extends UbicacionMatriz {
@@ -22,6 +21,7 @@ class Pieza extends UbicacionMatriz {
             case 'centros':
                 this.color = colorCentro();
                 this.ubicarColorCent();
+                break;
             case 'aristas':
                 this.posicionArista();
                 this.color = colores(CUBO.coloresAristas);
@@ -45,13 +45,13 @@ class Pieza extends UbicacionMatriz {
     }
 
     dimension3d() {
-        for(let l of PIEZA.LADOS) { //Definir 6 lados para cada pieza
-            let lado = crearElemento('span', {class:'pieza-face pieza-'+l});
-            //lado.style.background = this.color; //Se aplica a todas la piezas, pero se reasignará para las aristas y las esquinas
-            this.pieza3D.appendChild(lado);
+        for(let eje of Object.values(PIEZA.caras)) { //Definir 6 lados para cada pieza
+            for(let cara of eje) {
+                let lado = crearElemento('span', {class:'pieza-face pieza-'+cara});
+                this.pieza3D.appendChild(lado);
+            }
         }
     }
-
     
 /*---------------------------- PATRÓN DE UBICACIÓN EN EL CUBO --------------------------------*/
     posicion(e) {
@@ -84,7 +84,7 @@ class Pieza extends UbicacionMatriz {
         for(let e of Object.keys(this.pos)) {
             if(this.pos[e] != 1) {
                 let i = this.pos[e]/this.pos[e] || 0;
-                let cara = this.pieza3D.getElementsByClassName('pieza-'+PIEZA.CARAS[e][i])[0];
+                let cara = this.pieza3D.getElementsByClassName('pieza-'+PIEZA.caras[e][i])[0];
                 cara.style.background = this.color[c];
                 c++;
             }
@@ -94,7 +94,7 @@ class Pieza extends UbicacionMatriz {
     ubicarColoresEsq() {
         for(let e of Object.keys(this.pos)) {
             let i = this.pos[e]/this.pos[e] || 0;
-            let cara = this.pieza3D.getElementsByClassName('pieza-'+PIEZA.CARAS[e][i])[0];
+            let cara = this.pieza3D.getElementsByClassName('pieza-'+PIEZA.caras[e][i])[0];
             cara.style.background = this.color[ Object.keys(this.pos).indexOf(e) ];
         }
     }

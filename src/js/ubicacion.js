@@ -1,5 +1,4 @@
-'use strict'
-/*------------------------------------- PATRONES DE UBICACIÓN ---------------------------------------------*/
+/*------------------------------------- PATRONES DE UBICACIÓN ---------------------------------------------*/'use strict'
 class UbicacionMatriz {    
     //Determinar coordenadas de cada pieza, partiendo desde el nucleo del cubo (1,1,1) y ubicándose en un lado correspondiente
     constructor(tipoPieza, eje) {
@@ -13,6 +12,7 @@ class UbicacionMatriz {
     }
 
     coordenadas(movEje1, movEje2) {
+        this.moverEje(this.eje, movEje1);
         switch(this.tipoPieza) {        
             case 'aristas':
                 this.coorArista(movEje1, movEje2);
@@ -24,7 +24,6 @@ class UbicacionMatriz {
     }
 
     coorArista(lado, pos) {
-        this.moverEje(this.eje, lado);
         var rest = Object.keys(this.pos);  //Descartar eje de la iteración, guardar ejes restantes
         rest.splice(rest.indexOf(this.eje), 1); //Al segundo eje (Descartando el eje de la iteración), se le aplica el patrón -1 & 1:
         this.pos[rest[1]]+= pos;
