@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     crear('esquina', 8);
 
     console.log(CUBO.RUBIK);
+
 });
 
 function crear(tipoPieza, cant) {
