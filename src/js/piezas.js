@@ -33,7 +33,7 @@ class Pieza extends UbicacionMatriz {
         this.atributos();
         this.ubicarColores();
         this.ubicarPieza();
-        this.eventoMover();
+        this.moverLados();
     }
 
 
@@ -101,15 +101,13 @@ class Pieza extends UbicacionMatriz {
         cubo3D.appendChild(this.pieza3D);
     }
 
-    eventoMover() {
+    moverLados() {
         if(this.tipoPieza == 'centro') {
             let guia = crearElemento('div', {class:'guia', 
                 'data-x':this.pos.x, 'data-y':this.pos.y, 'data-z':this.pos.z});
             cubo3D.appendChild(guia);
-        } else {
-            this.pieza3D.addEventListener('mousedown', e => {
-                if(e.button == 0) document.addEventListener('mousemove', moverLado);
-            });
-        }
+        } 
+        else
+        	this.pieza3D.addEventListener('mousedown', e => { new Mover(e); });
     }
 }

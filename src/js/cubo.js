@@ -27,7 +27,7 @@ let girarCubo = (x,y) => {cubo3D.style.transform = "rotateX("+x+"deg) rotateY("+
 let giroInicial = setInterval(function(){
     girarCubo(x,y);
     clearInterval(giroInicial);
-}, /*1000*/);
+}, 300);
 
 let desplazar = e => {
     cubo3D.style.transition = 'transform 0s'; //Rotación inmediata
