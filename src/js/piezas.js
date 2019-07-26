@@ -40,7 +40,7 @@ class Pieza extends UbicacionMatriz {
     dimension3d() {
         for(let eje of Object.values(PIEZA.caras)) { //Definir 6 lados para cada pieza
             for(let cara of eje) {
-                let lado = crearElemento('span', {class:'pieza-face pieza-'+cara});
+                let lado = crearElemento('span', {class:'pieza-face '+cara});
                 this.pieza3D.appendChild(lado);
             }
         }
@@ -75,7 +75,7 @@ class Pieza extends UbicacionMatriz {
         for(let e of Object.keys(this.pos)) {
             if(this.pos[e] != 1) {
                 let i = this.pos[e]/this.pos[e] || 0;
-                let cara = this.pieza3D.getElementsByClassName('pieza-'+PIEZA.caras[e][i])[0];
+                let cara = this.pieza3D.getElementsByClassName(PIEZA.caras[e][i])[0];
                 cara.style.background = this.color[c];
                 c++;
             }
@@ -99,6 +99,7 @@ class Pieza extends UbicacionMatriz {
         let pieza = {tipo: this.tipoPieza, pieza3D: this.pieza3D, coor: this.pos, coor3D: this.posicion3D};
         CUBO.RUBIK[this.pos.x][this.pos.y][this.pos.z] = pieza;
         cubo3D.appendChild(this.pieza3D);
+        CUBO.PIEZAS.push(this.pieza3D);
     }
 
     moverLados() {
@@ -108,6 +109,6 @@ class Pieza extends UbicacionMatriz {
             cubo3D.appendChild(guia);
         } 
         else
-        	this.pieza3D.addEventListener('mousedown', e => { new Mover(e); });
+        	this.pieza3D.addEventListener('mousedown', e => { if(e.button == 0) new Mover(e); });
     }
 }

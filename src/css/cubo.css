@@ -26,12 +26,12 @@
 /*.guia { background: #8e44ad; }*/
 
 /*-------------------------- PIEZAS: ROTACIÓN DE LAS 6 CARAS -------------------------------------*/
-.pieza-left  { transform: rotateY(-90deg) translateZ(36px) translateX(-48%); }
-.pieza-right {transform: rotateY(90deg) translateZ(36px) translateX(48%); }
-.pieza-top  { transform: rotateX(90deg) translateZ(36px) translateY(-48%); }
-.pieza-bottom  { transform: rotateX(-90deg) translateZ(36px) translateY(48%); }
-.pieza-front {transform: translateZ(2px); }
-.pieza-back  { transform: translateZ(-72px); }
+.left  { transform: rotateY(-90deg) translateZ(36px) translateX(-48%); }
+.right {transform: rotateY(90deg) translateZ(36px) translateX(48%); }
+.top  { transform: rotateX(90deg) translateZ(36px) translateY(-48%); }
+.bottom  { transform: rotateX(-90deg) translateZ(36px) translateY(48%); }
+.front {transform: translateZ(2px); }
+.back  { transform: translateZ(-72px); }
 
 /*------------------------------------------------------------------------------------------------*/
 

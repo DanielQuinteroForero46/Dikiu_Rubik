@@ -1,39 +1,81 @@
+const M  = {
+	GUIAS: cubo3D.getElementsByClassName('guia'),
+	'front': ['x', 'y'],
+	'back': ['x', 'y'],
+	'top': ['x', 'z'],
+	'bottom': ['x', 'z'],
+	'left': ['z', 'y'],
+	'right': ['z', 'y']
+}
+
 class Mover {
-	constructor(e) {
-		self = this; //Acceder a this en la función de moverLado (Invocada en el eventListener)
-		this.piezaSelec = e.target.parentElement;
-		this.mX = 0;
-		this.mover(e);
+	constructor(click) {
+		self = this;
+		this.mov = {mX:0, mY:0}; //Desplazamiento a partir del evento click
+		this.direccion = null;
+		self.eje = null;
+		this.iniciar = false;
+		this.rotate = null;
+
+		this.init(); //Desplazamiento (mousemove)
 		this.stop(); //Detener movimiento (mouseup)
+		this.pieza = click.target.parentElement;
+		this.ladoSelec = click.target;
 	}
 
-	moverLado(e) {
-	    let piezas = cubo3D.getElementsByClassName('pieza');
-	    let guias = cubo3D.getElementsByClassName('guia');
 
-	    for(let p of piezas) {
-	        let x = p.getAttribute('data-x'), y = p.getAttribute('data-y'), z = p.getAttribute('data-z');
-	        let p_ejeX = self.piezaSelec.getAttribute('data-x');
-	        if(x == p_ejeX) {
-	            for(let g of guias) {
-	                if(g.getAttribute('data-x') == x) {
+	guiaPiezas() {
+		let ePieza = self.pieza.getAttribute('data-'+self.eje);
+
+	    for(let p of CUBO.PIEZAS) {
+	        let e = p.getAttribute('data-'+self.eje);
+	        if(e == ePieza) {
+	            for(let g of M.GUIAS) {
+	                if(g.getAttribute('data-'+self.eje) == e) {
 	                    g.appendChild(p);
-	                    self.mX-= e.movementY / 20;
-	                    console.log(self.mX);
-	                    g.style.transform = 'rotateX('+self.mX+'deg) translateZ(8px)'; //El eje del translate cambia de acuerdo a la rotación actual del guía
+	                    self.rotar(ePieza);
+
+	                    g.style.transform = 'rotateX('+self.rotate+'deg)'; //El eje del translate cambia de acuerdo a la rotación actual del guía
 	                }
 	            }
 	        }
 	    }
 	}
 
-	mover(e) {
-		if(e.button == 0) document.addEventListener('mousemove', this.moverLado);
+	rotar(ePieza) {
+		console.log(self.e.movementY);
+		if(ePieza == 0) self.rotate-= self.e.movementY / 20;
+		else self.rotate+= self.e.movementY / 20;
 	}
+
+
+	desplazar(e) {
+		self.e = e; //Evento mousemove
+		(!self.iniciar)? self.movInit() : self.guiaPiezas();
+	}
+
+	movInit() {
+		self.mov.mX+= Math.abs(self.e.movementX);
+		self.mov.mY+= Math.abs(self.e.movementY);
+		self.mov.mX > 15 || self.mov.mY > 15? ( //Determinar dirección (x || y || z) una vez desplazados 15px en x o y (document)
+			self.iniciar = true,
+			self.defDireccion()) :0;
+	}
+
+	defDireccion() {
+		self.mov.mX > self.mov.mY? self.direccion = 1 : self.direccion = 0;
+		let lado = this.ladoSelec.classList[1];
+		
+		self.eje = M[lado][self.direccion];
+		console.log('Rotación y cara en el eje: ',self.eje);
+	}
+
+	
+	init() { document.addEventListener('mousemove', this.desplazar); }
 
 	stop() {
 		document.addEventListener('mouseup', e => {
-		    document.removeEventListener('mousemove', this.moverLado);
+		    document.removeEventListener('mousemove', this.desplazar);
 		});
 	}
 }
