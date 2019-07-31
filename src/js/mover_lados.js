@@ -1,4 +1,5 @@
-const GIRO  = { //Ejes de rotación para el lado seleccionado:
+const GIRO = { //Ejes de rotación para el lado seleccionado:
+    GRADOS: [0, 90, 180, 270, 360],
 	'left': ['z', 'y'],
 	'right': ['z', 'y'],
 	'top': ['x', 'z'],
@@ -87,8 +88,31 @@ class Mover {
 	}
 
 
-	reUbicar(pieza) { //Determinar nueva ubicación y rotación:
-		pieza.rotacion = (this.grados >= 360)? Math.abs(360 - this.grados) : this.grados;
-		console.log(`Rotación: ${pieza.rotacion} grados`);
+    reUbicar(pieza) { //Determinar ubicación y rotación final:
+        var puntoInicial = pieza.rotacion, girar = 0, devolver = -90;
+        console.log('Punto inicial: ', puntoInicial);
+
+        for (let g of GIRO.GRADOS) {
+            if (Math.abs(this.rotating) <= g) { girar = g; break; }
+            else girar = 0;
+        }
+
+        pieza.rotacion = (Math.abs(this.grados) >= 360) ? Math.abs(360 - this.grados) : this.grados;
+        console.log(`Rotación: ${pieza.rotacion} grados`);
+
+        let distancia = pieza.rotacion - (girar + devolver);
+        console.log('Distancia del eje: ', distancia);
+
+        if (this.rotating < 0) {
+            girar = -Math.abs(girar);
+            devolver = Math.abs(devolver);
+        }
+
+        pieza.rotacion = (distancia >= 30) ? puntoInicial + girar : puntoInicial + (girar + devolver);
+
+        pieza.pieza3D.style.transition = 'transform .2s'; //Animación rotate
+        pieza.pieza3D.style.transform = 'rotate' + this.eje + '(' + pieza.rotacion + 'deg) ' +
+            'translate3d(' + pieza.coor3D.x + 'em, ' + pieza.coor3D.y + 'em, ' + pieza.coor3D.z + 'em)';
+
 	}
 }

@@ -3,7 +3,7 @@ const CUBO = {
     PIEZAS: [], //Almacenar cada pieza como un objeto.
     NUCLEO: {x:1, y:1, z:1}, //Eje central del cubo, a partir del cual se ubicarán las piezas.
     MOV: {uno:-1, dos:1}, //MOVIMIENTO: Dirección de movimiento de cada eje con respecto al nucleo
-    COLORES: { x: ['#ffd633', '#FFFFFF'], y: ['#00cc00', '#1a53ff'], z: ['#ff8000', '#ff1a1a'] }, /*  Amarillo, Blanco  |  Verde, Azul  | Naranja, Rojo */
+    COLORES: { x: ['#FFF809', '#FFFFFF'], y: ['#7FEA1A', '#4052FF'], z: ['#ff8000', '#EE2929'] }, /*  Amarillo, Blanco  |  Verde, Azul  | Naranja, Rojo */
     colorCentros: [],
     coloresAristas: [],
     coloresEsquinas: []
