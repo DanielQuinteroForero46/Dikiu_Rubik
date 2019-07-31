@@ -2,9 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     crear('centro', 6); //Tipo de pieza | cantidad
     crear('arista', 12);
     crear('esquina', 8);
-
-    console.log(CUBO.RUBIK);
-
+    
 });
 
 function crear(tipoPieza, cant) {
