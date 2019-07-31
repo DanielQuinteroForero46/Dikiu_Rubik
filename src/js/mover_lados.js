@@ -1,81 +1,94 @@
-const M  = {
-	GUIAS: cubo3D.getElementsByClassName('guia'),
-	'front': ['x', 'y'],
-	'back': ['x', 'y'],
+const GIRO  = { //Ejes de rotación para el lado seleccionado:
+	'left': ['z', 'y'],
+	'right': ['z', 'y'],
 	'top': ['x', 'z'],
 	'bottom': ['x', 'z'],
-	'left': ['z', 'y'],
-	'right': ['z', 'y']
+	'back': ['x', 'y'],
+	'front': ['x', 'y']
 }
 
 class Mover {
-	constructor(click) {
-		self = this;
-		this.mov = {mX:0, mY:0}; //Desplazamiento a partir del evento click
-		this.direccion = null;
-		self.eje = null;
+	constructor(click) { self = this;
+		this.init = space.addEventListener('mousemove', this.inicio); //Desplazamiento (mousemove)
+		this.stop = document.addEventListener('mouseup', this.detener);
+	/*--------------------------------------------------------------------------------------------*/
+		this.mov = {mX:0, mY:0, space:0}; //Desplazamiento inicial a partir del evento click
+		this.eje = null;
 		this.iniciar = false;
-		this.rotate = null;
-
-		this.init(); //Desplazamiento (mousemove)
-		this.stop(); //Detener movimiento (mouseup)
 		this.pieza = click.target.parentElement;
 		this.ladoSelec = click.target;
+		this.posEjePieza = null; //Posición del eje de rotación de la pieza seleccionada
+		this.grados = 0; // Rotación final de la pieza (mouseup)
+		this.rotating = 0; //Rotación hecha a partir de la rotación actual de la pieza
 	}
 
+	inicio(e) {
+		self.e = e; //Evento mousemove
+		(!self.iniciar)? self.desplazamientoInicial() : self.rotacion();
+	}
 
-	guiaPiezas() {
-		let ePieza = self.pieza.getAttribute('data-'+self.eje);
+	detener(p) {
+	 	//Detener movimiento (mouseup)
+	    space.removeEventListener('mousemove', self.inicio);
+	    document.removeEventListener('mouseup', self.detener);
+	    self.movimiento('fin');
+	}
 
-	    for(let p of CUBO.PIEZAS) {
-	        let e = p.getAttribute('data-'+self.eje);
-	        if(e == ePieza) {
-	            for(let g of M.GUIAS) {
-	                if(g.getAttribute('data-'+self.eje) == e) {
-	                    g.appendChild(p);
-	                    self.rotar(ePieza);
-
-	                    g.style.transform = 'rotateX('+self.rotate+'deg)'; //El eje del translate cambia de acuerdo a la rotación actual del guía
-	                }
-	            }
+	movimiento(f) { //Iniciar || Detener rotación de piezas que tienen la misma coordenada en el eje de rotación estipulado
+	    for(let pieza of CUBO.PIEZAS) {
+	        if(pieza.coor[this.eje] == this.posEjePieza) {
+	        	switch(f) {
+	        		case 'rotar': this.rotar(pieza); break;
+	        		case 'fin': this.reUbicar(pieza); break;
+	        	}
 	        }
 	    }
 	}
 
-	rotar(ePieza) {
-		console.log(self.e.movementY);
-		if(ePieza == 0) self.rotate-= self.e.movementY / 20;
-		else self.rotate+= self.e.movementY / 20;
-	}
-
-
-	desplazar(e) {
-		self.e = e; //Evento mousemove
-		(!self.iniciar)? self.movInit() : self.guiaPiezas();
-	}
-
-	movInit() {
+/*---------------- DETERMINAR EJE DE ROTACIÓN EN EL DESPLAZAMIENTO INICIAL -------------------------*/
+	desplazamientoInicial() {
 		self.mov.mX+= Math.abs(self.e.movementX);
 		self.mov.mY+= Math.abs(self.e.movementY);
-		self.mov.mX > 15 || self.mov.mY > 15? ( //Determinar dirección (x || y || z) una vez desplazados 15px en x o y (document)
+		self.mov.mX > 10 || self.mov.mY > 10? ( //Determinar dirección (x || y || z) una vez desplazados 10px en x || y (mousemove)
 			self.iniciar = true,
-			self.defDireccion()) :0;
+			self.ejeRotacion()) :0;
 	}
 
-	defDireccion() {
-		self.mov.mX > self.mov.mY? self.direccion = 1 : self.direccion = 0;
+	ejeRotacion() {
+		let direccion = 0;
+		if(self.mov.mX > self.mov.mY)  {
+			self.mov.space = 'movementX';
+			direccion = 1;
+
+		} else self.mov.space = 'movementY';
+
 		let lado = this.ladoSelec.classList[1];
+		self.eje = GIRO[lado][direccion];
+		this.posEjePieza = self.pieza.getAttribute('data-'+self.eje);
 		
-		self.eje = M[lado][self.direccion];
-		console.log('Rotación y cara en el eje: ',self.eje);
+		console.log('EJE DE ROTACIÓN: '+self.eje);
 	}
 
-	
-	init() { document.addEventListener('mousemove', this.desplazar); }
+/*------------------------------ OBTENER PIEZAS E INICIAR ROTACIÓN -----------------------------------------*/
+	rotacion() {
+		//Grados de rotación del lado a partir del movimiento en el eje (x || y):
+		this.rotating += (this.e[this.mov.space] / 2); //Velocidad de rotación (0.5)
+		this.movimiento('rotar');
+	}
 
-	stop() {
-		document.addEventListener('mouseup', e => {
-		    document.removeEventListener('mousemove', this.desplazar);
-		});
+
+	rotar(pieza) {
+		this.grados = pieza.rotacion + this.rotating; //Posición rotate actual de la pieza + rotate de desplazamiento
+
+		pieza.pieza3D.style.transition = 'transform 0s'; //Rotación inmediata
+	    pieza.pieza3D.style.transform = 
+	    	'rotate'+this.eje+'('+this.grados+'deg) '+
+	    	'translate3d('+pieza.coor3D.x+'em, '+pieza.coor3D.y+'em, '+pieza.coor3D.z+'em)';
+	}
+
+
+	reUbicar(pieza) { //Determinar nueva ubicación y rotación:
+		pieza.rotacion = (this.grados >= 360)? Math.abs(360 - this.grados) : this.grados;
+		console.log(`Rotación: ${pieza.rotacion} grados`);
 	}
 }
