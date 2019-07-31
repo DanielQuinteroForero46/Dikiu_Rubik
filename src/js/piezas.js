@@ -1,14 +1,14 @@
 'use strict';
 const PIEZA = {
     caras: { x:['left', 'right'], y:['top', 'bottom'], z:['back','front'] },
-    MOV: {x:100, y:100, z:65} //Patrón de ubicación en cada eje: Se realiza un translate con CSS
+    MOV: {x:4, y:4, z:4} //Patrón de ubicación en cada eje: Se realiza un translate con CSS
 }
 /*------------------------------------- CREAR Y UBICAR PIEZAS EN EL CUBO -------------------------------------*/
 class Pieza extends UbicacionMatriz {
     constructor(tipoPieza, eje) {
         super(tipoPieza, eje);
         this.pieza3D = crearElemento('span', { class:'pieza '+tipoPieza});
-        this.posicion3D = {x:0, y:0, z:30}; //Punto de partida para ubicación de las piezas en el cubo
+        this.posicion3D = {x:0, y:0, z:2}; //Punto de partida para ubicación de las piezas en el cubo
     }
 
     crear(mov1, mov2) {
@@ -38,9 +38,9 @@ class Pieza extends UbicacionMatriz {
 
 
     dimension3d() {
-        for(let eje of Object.values(PIEZA.caras)) { //Definir 6 lados para cada pieza
-            for(let cara of eje) {
-                let lado = crearElemento('span', {class:'pieza-face '+cara});
+        for(let caras of Object.values(PIEZA.caras)) { //Definir 6 lados para cada pieza
+            for(let c of caras) {
+                let lado = crearElemento('span', {class:'pieza-face '+c});
                 this.pieza3D.appendChild(lado);
             }
         }
@@ -87,28 +87,21 @@ class Pieza extends UbicacionMatriz {
         this.pieza3D.setAttribute('data-x', this.pos.x);
         this.pieza3D.setAttribute('data-y', this.pos.y);
         this.pieza3D.setAttribute('data-z', this.pos.z);
-        this.pieza3D.setAttribute('data-color', this.color);
     }
 
     ubicarPieza() {
     	let self=this, animation = setInterval(function(){
-            self.pieza3D.style.transform = 'translate3d('+self.posicion3D.x+'%,'+self.posicion3D.y+'%,'+self.posicion3D.z+'px)';
+            self.pieza3D.style.transform = 'translate3d('+self.posicion3D.x+'em,'+self.posicion3D.y+'em,'+self.posicion3D.z+'em)';
             clearInterval(animation);
         }, 500);
 
-        let pieza = {tipo: this.tipoPieza, pieza3D: this.pieza3D, coor: this.pos, coor3D: this.posicion3D};
-        CUBO.RUBIK[this.pos.x][this.pos.y][this.pos.z] = pieza;
+        let pieza = {tipo: this.tipoPieza, pieza3D: this.pieza3D, coor: this.pos, coor3D: this.posicion3D, rotacion: 0};
+        CUBO.PIEZAS.push(pieza);
         cubo3D.appendChild(this.pieza3D);
-        CUBO.PIEZAS.push(this.pieza3D);
     }
 
     moverLados() {
-        if(this.tipoPieza == 'centro') {
-            let guia = crearElemento('div', {class:'guia', 
-                'data-x':this.pos.x, 'data-y':this.pos.y, 'data-z':this.pos.z});
-            cubo3D.appendChild(guia);
-        } 
-        else
-        	this.pieza3D.addEventListener('mousedown', e => { if(e.button == 0) new Mover(e); });
+        if(this.tipoPieza != 'centro')
+            this.pieza3D.addEventListener('mousedown', e => { if(e.button == 0) new Mover(e); });
     }
 }
