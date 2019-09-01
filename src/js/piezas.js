@@ -87,6 +87,7 @@ class Pieza extends UbicacionMatriz {
         this.pieza3D.setAttribute('data-x', this.pos.x);
         this.pieza3D.setAttribute('data-y', this.pos.y);
         this.pieza3D.setAttribute('data-z', this.pos.z);
+        this.pieza3D.setAttribute('data-rotacion', 0);
     }
 
     ubicarPieza() {
