@@ -9,6 +9,7 @@ class Pieza extends UbicacionMatriz {
         super(tipoPieza, eje);
         this.pieza3D = crearElemento('span', { class:'pieza '+tipoPieza});
         this.posicion3D = {x:0, y:0, z:2}; //Punto de partida para ubicación de las piezas en el cubo
+        this.rotacion = {x:0, y:0, z:0}; //Punto de partida para rotación de piezas
     }
 
     crear(mov1, mov2) {
@@ -87,7 +88,9 @@ class Pieza extends UbicacionMatriz {
         this.pieza3D.setAttribute('data-x', this.pos.x);
         this.pieza3D.setAttribute('data-y', this.pos.y);
         this.pieza3D.setAttribute('data-z', this.pos.z);
-        this.pieza3D.setAttribute('data-rotacion', 0);
+        this.pieza3D.setAttribute('data-rotacion-x', 0);
+        this.pieza3D.setAttribute('data-rotacion-y', 0);
+        this.pieza3D.setAttribute('data-rotacion-z', 0);
     }
 
     ubicarPieza() {
@@ -96,7 +99,7 @@ class Pieza extends UbicacionMatriz {
             clearInterval(animation);
         }, 500);
 
-        let pieza = {tipo: this.tipoPieza, pieza3D: this.pieza3D, coor: this.pos, coor3D: this.posicion3D, rotacion: 0};
+        let pieza = {tipo: this.tipoPieza, pieza3D: this.pieza3D, coor: this.pos, coor3D: this.posicion3D, rotacion: this.rotacion};
         CUBO.PIEZAS.push(pieza);
         cubo3D.appendChild(this.pieza3D);
     }

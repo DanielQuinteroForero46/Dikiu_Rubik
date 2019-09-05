@@ -1,9 +1,7 @@
 const GIRO  = { //Ejes de rotación para el lado seleccionado:
 	distancia: 25, //(°) Distancia mínima a recorrer a partir de un ángulo para posicionarse en el sig. ángulo
-	positivo: 1, 
-	negativo: -1,
+	direccion: 0, // 1 = giro positivo || -2 = giro negativo
     ANGULOS: [0, 90, 180, 270, 360],
-    PIEZAS_EN_MOV: [],
 	'left': ['z', 'y'],
 	'right': ['z', 'y'],
 	'top': ['x', 'z'],
@@ -23,7 +21,7 @@ class Mover {
 		this.pieza = click.target.parentElement;
 		this.ladoSelec = click.target;
 		this.posEjePieza = null; //Posición del eje de rotación de la pieza seleccionada
-		this.anguloInicial = parseInt(this.pieza.getAttribute('data-rotacion')); // Rotación inicial de la pieza (mousedown)
+		this.anguloInicial = null; // Rotación inicial de la pieza (mousedown)
 		this.anguloFinal = 0; // Rotación final de la pieza (mouseup)
 		this.rotating = 0; //Rotación hecha a partir del angulo inicial
 	}
@@ -61,6 +59,7 @@ class Mover {
 
 		let lado = this.ladoSelec.classList[1];
 		self.eje = GIRO[lado][direccion];
+		this.anguloInicial = parseInt(this.pieza.getAttribute('data-rotacion-'+self.eje));
 		this.posEjePieza = self.pieza.getAttribute('data-'+self.eje);
 		
 		console.log('EJE DE ROTACIÓN: '+self.eje);
@@ -75,10 +74,10 @@ class Mover {
 	}
 
 
-	rotar(angulo, pieza, seg) {
+	rotar(pieza, seg) {
 		pieza.pieza3D.style.transition = 'transform '+seg+'s'; //Definir transición de rotación (0 = mover || 0.2 = ubicar)
 	    pieza.pieza3D.style.transform =
-	    	'rotate'+this.eje+'('+angulo+'deg) '+
+	    	'rotateX('+pieza.rotacion.x+'deg) rotateY('+pieza.rotacion.y+'deg) rotateZ('+pieza.rotacion.z+'deg) '+
 	    	'translate3d('+pieza.coor3D.x+'em, '+pieza.coor3D.y+'em, '+pieza.coor3D.z+'em)';
 	}
 
@@ -86,10 +85,15 @@ class Mover {
 	movimiento(angulo, seg) { //Iniciar || Detener rotación de piezas que tienen la misma coordenada en el eje de rotación estipulado
 	    for(let pieza of CUBO.PIEZAS) {
 	        if(pieza.coor[this.eje] == this.posEjePieza) {
-        		this.rotar(angulo, pieza, seg);
+        		let angAnterior = pieza.pieza3D.getAttribute('data-rotacion-'+this.eje);
+	        	pieza.rotacion[this.eje] = angulo;
+        		this.rotar(pieza, seg);
         		this.giro360(angulo, pieza);
-        		pieza.pieza3D.setAttribute('data-rotacion', angulo);
-        		if(!self.iniciar) GIRO.PIEZAS_EN_MOV.push(pieza.pieza3D);
+
+        		if(!this.iniciar && angulo != angAnterior){
+        			pieza.pieza3D.setAttribute('data-rotacion-'+this.eje, angulo);
+        			this.defNuevaPosicion(pieza, angulo);
+        		}
 	        }
 	    }
 	}
@@ -98,7 +102,8 @@ class Mover {
 		if(Math.abs(angulo) == 360) {
 			self.anguloFinal = 0;
 			setTimeout(function(){
-				pieza.pieza3D.setAttribute('data-rotacion', 0);
+				pieza.rotacion[self.eje] = 0;
+				pieza.pieza3D.setAttribute('data-rotacion-'+self.eje, 0);
 			}, 200);
 		}
 	}
@@ -106,22 +111,41 @@ class Mover {
 /*------------------------------ DETENER ROTACIÓN Y UBICAR PIEZA -----------------------------------------*/
 	ubicar() {
 		let rotacion = self.anguloFinal;
-		let direccion = (self.anguloFinal > 0) ? GIRO.positivo : GIRO.negativo;
+		GIRO.direccion = (self.rotating > 0) ? 1 : -1;
 		
 		for(let ang of GIRO.ANGULOS) { //Recorrer ángulos para determinar el fin de la rotación:
-			ang*=direccion; //Dirección positiva: ang * 1 || Dirección negatica: ang * -1
+			ang*=GIRO.direccion; //Dirección positiva: ang * 1 || Dirección negatica: ang * -1
 
 			//Determinar si el giro pasó por el ángulo:
 			let recorrido = rotacion - ang;
-			if( direccion === GIRO.positivo && recorrido > 0 )
+			if( GIRO.direccion > 0 && recorrido > 0 )
 				self.anguloFinal = (rotacion >= (ang+GIRO.distancia))? ang + 90 : ang; //POS
 
-			else if( direccion === GIRO.negativo && recorrido < 0 )
+			else if( GIRO.direccion < 0 && recorrido < 0 )
 				self.anguloFinal = (rotacion <= (ang-GIRO.distancia))? ang - 90 : ang; //NEG
 		}
 	 	self.movimiento(self.anguloFinal, 0.2);
+	}
 
-	 	console.log(GIRO.PIEZAS_EN_MOV);
+
+	defNuevaPosicion(pieza, angulo) {
+		let a = 0, nuevaPos = null;
+		console.log(pieza.pieza3D);
+		console.log(pieza.coor);
+		for(let eje in pieza.coor) {
+			if(eje != self.eje){
+				let e = pieza.coor[eje], angAnterior = Math.abs(angulo - (90*GIRO.direccion));
+				if(a == 0) {
+					nuevaPos = (angAnterior % 2 == 0)? Math.abs(e - 2) : e;
+				} else if(a == 1) {
+					nuevaPos = (angAnterior % 2 == 0)? e : Math.abs(e - 2);
+				}
+				pieza.pieza3D.setAttribute('data-'+eje, nuevaPos);
+				pieza.coor[eje] = nuevaPos;
+				a++;
+			}
+		}
+		console.log(pieza.coor);
 	}
 
 }
