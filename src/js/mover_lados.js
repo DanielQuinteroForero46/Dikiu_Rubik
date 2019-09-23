@@ -27,7 +27,6 @@ class Mover {
 	}
 
 	inicio(e) {
-		GIRO.PIEZAS_EN_MOV = [];
 		self.e = e; //Evento mousemove
 		(!self.iniciar)? self.direccionRotacion() : self.obtenerAngulo();
 	}
@@ -38,6 +37,7 @@ class Mover {
 	    space.removeEventListener('mousemove', self.inicio);
 	    document.removeEventListener('mouseup', self.detener);
 	    self.ubicar();
+	    self.defNuevaPosicion();
 	}
 
 /*---------------- DETERMINAR EJE DE ROTACIÓN EN EL DESPLAZAMIENTO INICIAL -------------------------*/
@@ -78,7 +78,7 @@ class Mover {
 		pieza.pieza3D.style.transition = 'transform '+seg+'s'; //Definir transición de rotación (0 = mover || 0.2 = ubicar)
 	    pieza.pieza3D.style.transform =
 	    	'rotateX('+pieza.rotacion.x+'deg) rotateY('+pieza.rotacion.y+'deg) rotateZ('+pieza.rotacion.z+'deg) '+
-	    	'translate3d('+pieza.coor3D.x+'em, '+pieza.coor3D.y+'em, '+pieza.coor3D.z+'em)';
+	    	'translate3d('+(pieza.coor.x*PIEZA.mov)+'em, '+(pieza.coor.y*PIEZA.mov*-1)+'em, '+((pieza.coor.z+.5)*PIEZA.mov)+'em)';
 	}
 
 /*-------------------------------------- MOVIMIENTO DE PIEZAS --------------------------------------------*/
@@ -92,7 +92,7 @@ class Mover {
 
         		if(!this.iniciar && angulo != angAnterior){
         			pieza.pieza3D.setAttribute('data-rotacion-'+this.eje, angulo);
-        			this.defNuevaPosicion(pieza, angulo);
+        			this.defNuevaPosicion(pieza);
         		}
 	        }
 	    }
@@ -125,27 +125,15 @@ class Mover {
 				self.anguloFinal = (rotacion <= (ang-GIRO.distancia))? ang - 90 : ang; //NEG
 		}
 	 	self.movimiento(self.anguloFinal, 0.2);
+	 	document.getElementById('rotating').innerHTML = `${self.anguloFinal}°`;
 	}
 
 
-	defNuevaPosicion(pieza, angulo) {
-		let a = 0, nuevaPos = null;
-		console.log(pieza.pieza3D);
-		console.log(pieza.coor);
-		for(let eje in pieza.coor) {
-			if(eje != self.eje){
-				let e = pieza.coor[eje], angAnterior = Math.abs(angulo - (90*GIRO.direccion));
-				if(a == 0) {
-					nuevaPos = (angAnterior % 2 == 0)? Math.abs(e - 2) : e;
-				} else if(a == 1) {
-					nuevaPos = (angAnterior % 2 == 0)? e : Math.abs(e - 2);
-				}
-				pieza.pieza3D.setAttribute('data-'+eje, nuevaPos);
-				pieza.coor[eje] = nuevaPos;
-				a++;
-			}
-		}
-		console.log(pieza.coor);
+	defNuevaPosicion() {
+		let seno = Math.sin(self.anguloFinal);
+		let coseno = Math.cos(self.anguloFinal);
+		console.log(self.anguloFinal+"° -> Seno: ", seno);
+		console.log(self.anguloFinal+"° -> Coseno: ", coseno);
 	}
 
 }

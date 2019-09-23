@@ -1,7 +1,7 @@
 /*---------------------------------- PROPIEDADES DEL CUBO -----------------------------------------------*/'use strict';
 const CUBO = {
     PIEZAS: [], //Almacenar cada pieza como un objeto.
-    NUCLEO: {x:1, y:1, z:1}, //Eje central del cubo, a partir del cual se ubicarán las piezas.
+    NUCLEO: {x:0, y:0, z:0}, //Eje central del cubo, a partir del cual se ubicarán las piezas.
     MOV: {uno:-1, dos:1}, //MOVIMIENTO: Dirección de movimiento de cada eje con respecto al nucleo
     COLORES: { x: ['#FFF809', '#FFFFFF'], y: ['#7FEA1A', '#4052FF'], z: ['#ff8000', '#EE2929'] }, /*  Amarillo, Blanco  |  Verde, Azul  | Naranja, Rojo */
     colorCentros: [],

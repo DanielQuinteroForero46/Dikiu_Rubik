@@ -1,21 +1,19 @@
 'use strict';
 const PIEZA = {
     caras: { x:['left', 'right'], y:['top', 'bottom'], z:['back','front'] },
-    MOV: {x:4, y:4, z:4} //Patrón de ubicación en cada eje: Se realiza un translate con CSS
+    mov: 4 //Patrón de ubicación en cada eje: Se realiza un translate con CSS
 }
 /*------------------------------------- CREAR Y UBICAR PIEZAS EN EL CUBO -------------------------------------*/
 class Pieza extends UbicacionMatriz {
     constructor(tipoPieza, eje) {
         super(tipoPieza, eje);
         this.pieza3D = crearElemento('span', { class:'pieza '+tipoPieza});
-        this.posicion3D = {x:0, y:0, z:2}; //Punto de partida para ubicación de las piezas en el cubo
         this.rotacion = {x:0, y:0, z:0}; //Punto de partida para rotación de piezas
     }
 
     crear(mov1, mov2) {
         super.coordenadas(mov1, mov2); //Patrón de ubicación
         this.dimension3d();
-        this.posicion(this.eje);
         
         switch(this.tipoPieza) { //La ubicacion de cada centro se define moviendo únicamente la posición del eje en iteración
             case 'centro':
@@ -23,17 +21,15 @@ class Pieza extends UbicacionMatriz {
                 this.colorCentro();
                 break;
             case 'arista':
-                this.posicionArista();
                 this.color = colores(CUBO.coloresAristas);
                 break;
             case 'esquina':
-                this.posicionEsquina();
                 this.color = colores(CUBO.coloresEsquinas);
                 break;
         }
-        this.atributos();
         this.ubicarColores();
         this.ubicarPieza();
+        this.atributos();
         this.moverLados();
     }
 
@@ -47,23 +43,6 @@ class Pieza extends UbicacionMatriz {
         }
     }
 
-/*---------------------------- PATRÓN DE UBICACIÓN EN EL CUBO --------------------------------*/
-    posicion(e) {
-        this.posicion3D[e]+= (this.pos[e] * PIEZA.MOV[e]) - PIEZA.MOV[e];
-    }
-
-    posicionArista() {
-        if(this.eje == 'z') {
-            this.posicion('y');
-            this.posicion('x');
-        } else this.posicion('z');
-    }
-
-    posicionEsquina() {
-        if(this.eje == 'y') this.posicion('x');
-        else this.posicion('y');
-        this.posicion('z');
-    }
 
 /*------------------------------ UBICAR COLORES EN CADA CARA DE LA PIEZA ---------------------------- */
     colorCentro() {
@@ -72,10 +51,11 @@ class Pieza extends UbicacionMatriz {
         }
     }
 
-    ubicarColores(c = 0) {
+    ubicarColores() {
+        let c = 0;
         for(let e of Object.keys(this.pos)) {
-            if(this.pos[e] != 1) {
-                let i = this.pos[e]/this.pos[e] || 0;
+            if((this.pos[e]+1) != 1) {
+                let i = (this.pos[e]+1)/(this.pos[e]+1) || 0;
                 let cara = this.pieza3D.getElementsByClassName(PIEZA.caras[e][i])[0];
                 cara.style.background = this.color[c];
                 c++;
@@ -83,10 +63,10 @@ class Pieza extends UbicacionMatriz {
         }
     }
 
-/*--------------------------------- Ubicar pieza en el cubo 3D y guardarla en matriz ----------------------------------------*/
+/*--------------------------------- Ubicar pieza en el cubo 3D y guardarla en array ----------------------------------------*/
     atributos() {
         this.pieza3D.setAttribute('data-x', this.pos.x);
-        this.pieza3D.setAttribute('data-y', this.pos.y);
+        this.pieza3D.setAttribute('data-y', (this.pos.y * -1));
         this.pieza3D.setAttribute('data-z', this.pos.z);
         this.pieza3D.setAttribute('data-rotacion-x', 0);
         this.pieza3D.setAttribute('data-rotacion-y', 0);
@@ -95,11 +75,12 @@ class Pieza extends UbicacionMatriz {
 
     ubicarPieza() {
     	let self=this, animation = setInterval(function(){
-            self.pieza3D.style.transform = 'translate3d('+self.posicion3D.x+'em,'+self.posicion3D.y+'em,'+self.posicion3D.z+'em)';
+            self.pieza3D.style.transform = 'translate3d('+(self.pos.x*PIEZA.mov)+'em,'+(self.pos.y*PIEZA.mov)+'em,'+((self.pos.z+.5)*PIEZA.mov)+'em)';
+            self.pos.y*=-1; //Invertir "y" para establecer el movimiento con base en el plano cartesiano
             clearInterval(animation);
-        }, 500);
-
-        let pieza = {tipo: this.tipoPieza, pieza3D: this.pieza3D, coor: this.pos, coor3D: this.posicion3D, rotacion: this.rotacion};
+        }, 500);        
+        
+        let pieza = {tipo: this.tipoPieza, pieza3D: this.pieza3D, coor: this.pos, rotacion: this.rotacion};
         CUBO.PIEZAS.push(pieza);
         cubo3D.appendChild(this.pieza3D);
     }
