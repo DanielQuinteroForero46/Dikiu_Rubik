@@ -19,7 +19,7 @@
   width: 12em; height: 12em;
   margin: 12em;
   transform: rotateX(720deg); /*Giro inicial*/
-  background: cyan;
+  /*background: cyan;*/
 }
 
 /*-------------------------- PIEZAS: ROTACIÓN DE LAS 6 CARAS -------------------------------------*/

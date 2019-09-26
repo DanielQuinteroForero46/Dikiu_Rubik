@@ -20,7 +20,7 @@ class Mover {
 		this.iniciar = false;
 		this.pieza = click.target.parentElement;
 		this.ladoSelec = click.target;
-		this.posEjePieza = null; //Posición del eje de rotación de la pieza seleccionada
+		this.ejeRotacion = null; //Posición del eje de rotación de la pieza seleccionada
 		this.anguloInicial = null; // Rotación inicial de la pieza (mousedown)
 		this.anguloFinal = 0; // Rotación final de la pieza (mouseup)
 		this.rotating = 0; //Rotación hecha a partir del angulo inicial
@@ -46,10 +46,10 @@ class Mover {
 		self.mov.mY+= Math.abs(self.e.movementY);
 		self.mov.mX > 10 || self.mov.mY > 10? ( //Determinar dirección (x || y || z) una vez desplazados 10px en x || y (mousemove)
 			self.iniciar = true,
-			self.ejeRotacion()) :0;
+			self.defEjeRotacion()) :0;
 	}
 
-	ejeRotacion() {
+	defEjeRotacion() {
 		let direccion = 0;
 		if(self.mov.mX > self.mov.mY)  {
 			self.mov.space = 'movementX';
@@ -60,7 +60,7 @@ class Mover {
 		let lado = this.ladoSelec.classList[1];
 		self.eje = GIRO[lado][direccion];
 		this.anguloInicial = parseInt(this.pieza.getAttribute('data-rotacion-'+self.eje));
-		this.posEjePieza = self.pieza.getAttribute('data-'+self.eje);
+		this.ejeRotacion = self.pieza.getAttribute('data-'+self.eje);
 		
 		console.log('EJE DE ROTACIÓN: '+self.eje);
 	}
@@ -84,7 +84,7 @@ class Mover {
 /*-------------------------------------- MOVIMIENTO DE PIEZAS --------------------------------------------*/
 	movimiento(angulo, seg) { //Iniciar || Detener rotación de piezas que tienen la misma coordenada en el eje de rotación estipulado
 	    for(let pieza of CUBO.PIEZAS) {
-	        if(pieza.coor[this.eje] == this.posEjePieza) {
+	        if(pieza.coor[this.eje] == this.ejeRotacion) {
         		let angAnterior = pieza.pieza3D.getAttribute('data-rotacion-'+this.eje);
 	        	pieza.rotacion[this.eje] = angulo;
         		this.rotar(pieza, seg);
@@ -92,7 +92,6 @@ class Mover {
 
         		if(!this.iniciar && angulo != angAnterior){
         			pieza.pieza3D.setAttribute('data-rotacion-'+this.eje, angulo);
-        			this.defNuevaPosicion(pieza);
         		}
 	        }
 	    }
@@ -130,10 +129,30 @@ class Mover {
 
 
 	defNuevaPosicion() {
-		let seno = Math.sin(self.anguloFinal);
-		let coseno = Math.cos(self.anguloFinal);
-		console.log(self.anguloFinal+"° -> Seno: ", seno);
-		console.log(self.anguloFinal+"° -> Coseno: ", coseno);
-	}
+		let seno = Math.round(Math.sin(self.anguloFinal * (Math.PI/180)));
+		let coseno = Math.round(Math.cos(self.anguloFinal * (Math.PI/180)));
+		let ejesMov = []; //Ejes (2) que cambiarán su posición
+		console.log(`${self.anguloFinal}° en radianes: ${self.anguloFinal * (Math.PI/180) } | Sen: ${seno} - Cos: ${coseno}`);
 
+		//Operación para definir el cambio de posición:
+		for(let pieza of CUBO.PIEZAS) {
+	        if(pieza.coor[this.eje] == this.ejeRotacion) {
+	        	for(let e of Object.keys(pieza.coor)) {
+					if(this.eje != e) //El eje de rotación mantiene la posición
+						ejesMov.push({eje: e, valor: pieza.coor[e]});
+				}
+				// console.log(ejesMov);
+				/*==================== x' = x * cos(ß) + y * sen(ß) | y' = y * cos(ß) - x * sen(ß) ====================*/
+				let eje1 = (ejesMov[0].valor * coseno) + (ejesMov[1].valor * seno),
+					eje2 = (ejesMov[1].valor * coseno) - (ejesMov[0].valor * seno);
+				// console.log(pieza.pieza3D);
+				pieza.coor[ejesMov[0].eje] = eje1;
+				pieza.coor[ejesMov[1].eje] = eje2;
+				pieza.pieza3D.setAttribute('data-'+ejesMov[0].eje, eje1);
+				pieza.pieza3D.setAttribute('data-'+ejesMov[1].eje, eje2);
+				
+				ejesMov = [];
+	        }
+	    }
+	}
 }
